@@ -6,7 +6,7 @@
     background-color: #000000;
     justify-content: flex-start;
     align-items: center;
-    border: 1px solid #FF0149;
+    /* border: 1px solid #FF0149; */
 }
 
 .menuItemContainer {
@@ -22,6 +22,6 @@ ol {
 
 .line {
     width: 90%;
-    height: 2px;
+    height: 1px;
     background-color: #383838;
 }
