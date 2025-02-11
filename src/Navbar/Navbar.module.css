@@ -1,0 +1,27 @@
+.nav {
+    height: 100%;
+    width: 17%;
+    display: flex;
+    flex-direction: column;
+    background-color: #000000;
+    justify-content: flex-start;
+    align-items: center;
+    border: 1px solid #FF0149;
+}
+
+.menuItemContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+ol {
+    width: 100%;
+    padding: 0%;
+    padding-left: 20px;
+}
+
+.line {
+    width: 90%;
+    height: 2px;
+    background-color: #383838;
+}
