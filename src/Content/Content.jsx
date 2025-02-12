@@ -1,15 +1,10 @@
 import m from './Content.module.css'
-import Video from './Video/Video';
+import MainPage from './MainPage/MainPage';
 
-function Content(props) {
-
-    let videosList = props.content.videos.map(v => (
-        <Video title={v.title} channelName={v.channelName} preview={v.preview} channelImage={v.channelImage} />
-    ));
-
+function Content(props) {   
     return (
         <div className={m.content}>
-            {videosList}
+            <MainPage content={props.content}/>
         </div>
     );
 }

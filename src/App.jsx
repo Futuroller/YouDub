@@ -18,15 +18,15 @@ function App() {
 let store = {
   navbar: {
     topMenu: [
-      { id: 1, title: 'Главная', picture: 'images/nehochu.jpg' },
-      { id: 2, title: 'Подписки', picture: 'images/nehochu.jpg' }
+      { id: 1, title: 'Главная', picture: 'images/mainIcon.png' },
+      { id: 2, title: 'Подписки', picture: 'images/followChannelsIcon.png' }
     ],
     middleMenu: [
-      { id: 1, title: 'История', picture: 'images/nehochu.jpg' },
-      { id: 2, title: 'Ваши видео', picture: 'images/nehochu.jpg' },
-      { id: 3, title: 'Смотреть позже', picture: 'images/nehochu.jpg' },
-      { id: 4, title: 'Понравившиеся', picture: 'images/nehochu.jpg' },
-      { id: 4, title: 'Плейлисты', picture: 'images/nehochu.jpg' }
+      { id: 1, title: 'История', picture: 'images/historyIcon.png' },
+      { id: 2, title: 'Ваши видео', picture: 'images/yourVideosIcon.png' },
+      { id: 3, title: 'Смотреть позже', picture: 'images/watchLaterIcon.png ' },
+      { id: 4, title: 'Понравившиеся', picture: 'images/likedVideoIcon.png' },
+      { id: 4, title: 'Плейлисты', picture: 'images/playlistsIcon.png' }
     ],
     followChannels: [
       { id: 1, title: 'Канал №1', picture: 'images/nehochu.jpg' },
