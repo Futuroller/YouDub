@@ -1,0 +1,13 @@
+.myChannelButton {
+    background-color: #313131;
+    color: white;
+    font-size: smaller;
+    min-width: 200px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 3%;
+    font-size: 17px;
+    border-radius: 15px;
+}

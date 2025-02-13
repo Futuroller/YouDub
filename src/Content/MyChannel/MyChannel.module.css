@@ -1,4 +1,28 @@
 .container {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    margin-bottom: 5%;
+}
+
+.label {
+    color: white;
+    font-size: 30px;
+    font-weight: 650;
+    margin: 0px;
+    width: 75%;
+}
+
+.videos {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.withoutVideoContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
