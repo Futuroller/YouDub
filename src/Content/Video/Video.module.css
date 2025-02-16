@@ -3,7 +3,7 @@
     width: 27%;
     min-width: 400px;
     margin: 2%;
-    background-color: #222222;
+    background-color: #22222275;
     display: flex;
     flex-direction: column;
     border-radius: 15px;
@@ -11,7 +11,7 @@
 
 .preview {
     width: 100%;
-    height: 80%;
+    height: 75%;
     object-fit: cover;
     border-radius: 15px;
 }
@@ -45,11 +45,18 @@
 .title {
     font-size: 18px;
     color: white;
-    font-weight: lighter;
 
 }
 
 .channelName {
+    font-size: 14px;
+    color: #CBCBCB;
+    font-weight: lighter;
+}
+
+.stats {
+    display: flex;
+    flex-direction: row;
     font-size: 14px;
     color: #CBCBCB;
     font-weight: lighter;

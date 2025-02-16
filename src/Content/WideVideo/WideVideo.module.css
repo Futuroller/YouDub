@@ -1,0 +1,124 @@
+.container {
+    height: 200px;
+    width: 100%;
+    min-width: 400px;
+    margin-bottom: 1%;
+    background-color: #22222275;
+    display: flex;
+    flex-direction: row;
+    border-radius: 15px;
+}
+
+.preview {
+    width: 50%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+.videoInfo {
+    display: flex;
+    height: 100%;
+    width: 90%;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-left: 20px;
+}
+
+.nameViews {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.subContainer {
+    height: 30%;
+    display: flex;
+    flex-direction: column;
+}
+
+.nameViews * {
+    font-size: 16px;
+    color: #CBCBCB;
+    font-weight: lighter;
+    margin-right: 20px;
+    text-wrap: nowrap;
+}
+
+/* .videoDescription {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+} */
+
+.videoDescription p {
+    margin: 0px;
+    margin-left: 10px;
+}
+
+.channelImage {
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    object-fit: cover;
+}
+
+.title {
+    font-size: 30px;
+    color: white;
+    font-weight: 600;
+    margin: 0%;
+}
+
+.stats {
+    display: flex;
+    flex-direction: row;
+    font-size: 14px;
+    color: #CBCBCB;
+    font-weight: lighter;
+}
+
+.description {
+    color: #CBCBCB;
+    font-weight: lighter;
+    font-size: 16px;
+    margin: 0%;
+    margin-bottom: 5%;
+}
+
+.buttons {
+    display: flex;
+    width: 20%;
+    height: 20%;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.buttons * {
+    height: 50px;
+    width: 50px;
+}
+
+.deleteButton {
+    background-color: #ffffff00;
+    background-image: url('../../images/cross.png');
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.moreButton {
+    width: 15px;
+    height: 30px;
+    padding: 0%;
+    background-color: #ffffff00;
+    background-image: url('../../images/moreButton.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}

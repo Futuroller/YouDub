@@ -6,7 +6,7 @@ import m from './MyChannel.module.css'
 function MyChannel(props) {
 
     let videosList = props.content.videos.map(v => (
-        <Video title={v.title} channelName={v.channelName} preview={v.preview} channelImage={v.channelImage} />
+        <Video key={v.id} title={v.title} channelName={v.channelName} preview={v.preview} channelImage={v.channelImage} />
     ));
 
     return (

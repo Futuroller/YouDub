@@ -1,4 +1,4 @@
-import Search from './Search/Search';
+import Search from '../Search/Search';
 import Channel from './Channel/Channel';
 import m from './Header.module.css'
 import HideNavButton from './HideNavButton/HideNavButton';

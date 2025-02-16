@@ -11,6 +11,10 @@ function Video(props) {
                 <div className={m.videoDescription}>
                     <p className={m.title}>{props.title}</p>
                     <p className={m.channelName}>{props.channelName}</p>
+                    <div className={m.stats}>
+                        <p>0 просмотров</p>
+                        <p>1 день назад</p>
+                    </div>
                 </div>
             </div>
         </div>

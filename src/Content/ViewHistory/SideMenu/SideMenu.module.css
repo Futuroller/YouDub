@@ -1,0 +1,19 @@
+.container {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.menuItems {
+    margin-top: 5%;
+    margin-left: 5%;
+}
+
+.menuItems p {
+    font-weight: 700;
+}
+
+.searchBar {
+    width: 200px;
+}

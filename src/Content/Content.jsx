@@ -10,7 +10,7 @@ function Content(props) {
             <Routes>
                 <Route path='/mainpage/*' element={<MainPage content={props.content} />} />
                 <Route path='/mychannel/*' element={<MyChannel content={props.content} />} />
-                <Route path='/viewhistory/*' element={<ViewHistory content={props.content} />} />
+                <Route path='/history/*' element={<ViewHistory content={props.content} menuItems={props.menuItems} />} />
             </Routes>
         </div>
     );
