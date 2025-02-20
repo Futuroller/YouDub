@@ -21,12 +21,12 @@ function App() {
 let store = {
   menuItems: {
     topMenu: [
-      { id: 1, title: 'Главная', picture: '../images/mainIcon.png', navigation: '/mainpage' },
-      { id: 2, title: 'Подписки', picture: '../images/followChannelsIcon.png' }
+      { id: 1, title: 'Главная', picture: '../images/mainIcon.png', navigation: '/main' },
+      { id: 2, title: 'Подписки', picture: '../images/followChannelsIcon.png', navigation: '/subscription-videos' }
     ],
     middleMenu: [
       { id: 3, title: 'История', picture: '../images/historyIcon.png', navigation: '/history' },
-      { id: 4, title: 'Ваш канал', picture: '../images/yourVideosIcon.png', navigation: '/mychannel' },
+      { id: 4, title: 'Ваш канал', picture: '../images/yourVideosIcon.png', navigation: '/my-channel' },
       { id: 5, title: 'Смотреть позже', picture: '../images/watchLaterIcon.png ' },
       { id: 6, title: 'Понравившиеся', picture: '../images/likedVideoIcon.png' },
       { id: 7, title: 'Плейлисты', picture: '../images/playlistsIcon.png' }

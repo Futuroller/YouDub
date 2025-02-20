@@ -1,11 +1,12 @@
 import MenuItem from '../../../MenuItem/MenuItem';
 import Search from '../../../Search/Search';
+import { NavLink } from 'react-router-dom';
 import m from './SideMenu.module.css'
 
 function SideMenu(props) {
 
     let sideMenuItemsList = props.sideMenu.map(i => (
-        <MenuItem picture={i.picture} title={i.title} />
+        <NavLink key={i.id} to={i.navigation}> <MenuItem picture={i.picture} title={i.title} to={i.navigation} /> </NavLink>
     ));
 
     return (

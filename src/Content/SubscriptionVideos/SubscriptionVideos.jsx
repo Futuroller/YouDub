@@ -1,7 +1,7 @@
 import Video from '../Video/Video';
-import m from './MainPage.module.css'
+import m from './SubscriptionVideos.module.css'
 
-function MainPage(props) {
+function SubscriptionVideos(props) {
 
     let videosList = props.content.videos.map(v => (
         <Video key={v.id} title={v.title} channelName={v.channelName} preview={v.preview} channelImage={v.channelImage} />
@@ -9,9 +9,13 @@ function MainPage(props) {
 
     return (
         <div className={m.container}>
-            {videosList}
+            <p className={m.title}>Новое</p>
+            <div className={m.videosContainer}>
+                {videosList}
+            </div>
         </div>
+
     );
 }
 
-export default MainPage;
+export default SubscriptionVideos;
