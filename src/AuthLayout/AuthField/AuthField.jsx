@@ -5,7 +5,14 @@ function AuthField(props) {
     return (
         <div className={m.container}>
             <p>{props.fieldTitle}</p>
-            <input type={props.type} placeholder={props.placeholder} className={m.textfield}></input>
+            <input
+                className={m.textfield}
+                type={props.type}
+                placeholder={props.placeholder}
+                value={props.value}
+                onChange={(e) => props.onChange(e.target.value)}
+                required
+            />
         </div>
     );
 }
