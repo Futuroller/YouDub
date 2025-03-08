@@ -19,22 +19,6 @@ function MainLayout() {
 
 let store = {
     menuItems: {
-        topMenu: [
-            { id: 1, title: 'Главная', picture: '../images/mainIcon.png', navigation: '/main/mainpage' },
-            { id: 2, title: 'Подписки', picture: '../images/followChannelsIcon.png', navigation: '/main/subscription-videos' }
-        ],
-        middleMenu: [
-            { id: 3, title: 'История', picture: '../images/historyIcon.png', navigation: '/main/history' },
-            { id: 4, title: 'Ваш канал', picture: '../images/yourVideosIcon.png', navigation: '/main/my-channel' },
-            { id: 5, title: 'Смотреть позже', picture: '../images/watchLaterIcon.png ' },
-            { id: 6, title: 'Понравившиеся', picture: '../images/likedVideoIcon.png' },
-            { id: 7, title: 'Плейлисты', picture: '../images/playlistsIcon.png' }
-        ],
-        followChannels: [
-            { id: 8, title: 'Канал №1', picture: '../images/nehochu.jpg' },
-            { id: 9, title: 'Канал №2', picture: '../images/nehochu.jpg' },
-            { id: 10, title: 'Канал №3', picture: '../images/nehochu.jpg' }
-        ],
         sideMenu: [
             { id: 11, title: 'Очистить историю просмотра', picture: '../images/basket.png' },
             { id: 12, title: 'Не сохранять историю просмотра', picture: '../images/pause.png' }

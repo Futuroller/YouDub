@@ -2,9 +2,12 @@ import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import AuthField from '../AuthField/AuthField';
 import apiRequest from '../../api/apiRequest';
-import m from './SignUpPage.module.css'
+import { useNavigate } from 'react-router-dom';
+import m from './SignUpPage.module.css';
 
 function SignUpPage(props) {
+
+    const navigate = useNavigate();
 
     const [authFieldsData, setAuthFieldsData] = useState([
         { id: 1, type: 'text', fieldTitle: 'Имя пользователя', placeholder: 'dubinsky', value: '' },
@@ -35,7 +38,6 @@ function SignUpPage(props) {
 
         const passwordRepeat = authFieldsData[3].value;
 
-
         if (data.username.length >= 3) {
             if (data.password.length >= 8) {
                 if (data.password === passwordRepeat) {
@@ -43,12 +45,12 @@ function SignUpPage(props) {
                     try {
                         const response = await apiRequest('/auth/signup', 'POST', data);
 
-                        if (response.success) {
-                            alert('Аккаунт создан');
+                        if (response.status === 201) {
+                            alert('Аккаунт создан. Активируйте его на вашем email-адресе');
+                            navigate('/auth/login');
                         } else {
                             alert('Ошибка при создании аккаунта');
                         }
-
                     } catch (error) {
                         console.error('Ошибка:', error);
                         alert('Ошибка сервера');
