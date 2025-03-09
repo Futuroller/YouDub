@@ -2,9 +2,41 @@ import Header from './Header/Header'
 import Navbar from './Navbar/Navbar'
 import Content from './Content/Content'
 import m from './MainLayout.module.css'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { setUser } from '../store/slices/userSlice';
+import apiRequest from '../api/apiRequest';
+import { useEffect } from 'react'
 
 function MainLayout() {
+
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        const token = localStorage.getItem('token'); // Получаем токен из localStorage
+        if (!token) {
+            console.log('Токен отсутствует. Пользователь не авторизован.');
+            navigate('/auth/login');
+            return;
+        }
+        const getUserData = async () => {
+            try {
+                const response = await apiRequest('/main', 'GET'); // Запрос к серверу для получения данных пользователя
+                if (response.status === 200) {
+                    dispatch(setUser(response)); // Обновляем состояние Redux
+                } else {
+                    console.error('Ошибка при получении данных пользователя:', response.message);
+                }
+            } catch (error) {
+                console.error('Ошибка при запросе данных пользователя:', error);
+            }
+        };
+
+        getUserData();
+    }, [dispatch, navigate]);
+
+
     return (
         <div className={m.app}>
             <Header />
@@ -18,12 +50,6 @@ function MainLayout() {
 }
 
 let store = {
-    menuItems: {
-        sideMenu: [
-            { id: 11, title: 'Очистить историю просмотра', picture: '../images/basket.png' },
-            { id: 12, title: 'Не сохранять историю просмотра', picture: '../images/pause.png' }
-        ]
-    },
     content: {
         videos: [
             { id: 1, title: 'Тархун часть 1', channelName: 'Амням Гатс', preview: '../images/preview.jpg', channelImage: '../images/channel.jpg' },

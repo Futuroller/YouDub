@@ -38,8 +38,10 @@ function LoginPage(props) {
 
             if (response.status === 200) {
                 const { token, user } = response;
+
                 if (user.is__activated) {
                     localStorage.setItem('token', token);
+                    console.log(localStorage.getItem('token', token));
                     navigate('/main/mainpage');
                 } else {
                     alert('Автивируйте аккаунт через ваш email');

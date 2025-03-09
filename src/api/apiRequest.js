@@ -12,7 +12,18 @@ export default async function apiRequest(endpoint, method, body = null) {
 
     if (body) options.body = JSON.stringify(body);
 
-    const response = await fetch(`${API_URL}${endpoint}`, options);
-    const data = await response.json();
-    return { status: response.status, ...data };
+    try {
+        const response = await fetch(`${API_URL}${endpoint}`, options);
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Ошибка при запросе к серверу');
+        }
+    
+        const data = await response.json();
+        return { status: response.status, ...data };
+    } catch (error) {
+        console.error(`Ошибка API: ${error}`);
+        return { status: 500, message: error.message };
+    }   
 }

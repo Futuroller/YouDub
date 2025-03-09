@@ -1,9 +1,12 @@
 import ButtonsBlock from './ButtonsBlock/ButtonsBlock';
 import ChannelHeader from './ChannelHeader/ChannelHeader';
-import Video from '../Video/Video'
-import m from './MyChannel.module.css'
+import Video from '../Video/Video';
+import { useDispatch } from 'react-redux';
+import m from './MyChannel.module.css';
 
 function MyChannel(props) {
+
+    const dispatch = useDispatch();
 
     let videosList = props.content.videos.map(v => (
         <Video key={v.id} title={v.title} channelName={v.channelName} preview={v.preview} channelImage={v.channelImage} />
