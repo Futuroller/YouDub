@@ -1,10 +1,41 @@
+import { fetchVideos, fetchMyVideos, clearVideos } from '../../../store/slices/videosSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
 import Video from '../Video/Video';
 import m from './MainPage.module.css'
 
 function MainPage(props) {
 
-    let videosList = props.content.videos.map(v => (
-        <Video key={v.id} title={v.title} channelName={v.channelName} preview={v.preview} channelImage={v.channelImage} />
+    const dispatch = useDispatch();
+    const { allVideos, isLoading, error } = useSelector(state => state.videos);
+
+    const [page, setPage] = useState(1);
+
+    useEffect(() => {
+        dispatch(fetchVideos({ page, limit: 10 }));
+    }, [page]);
+
+    const handleScroll = (e) => {
+        const { scrollTop, clientHeight, scrollHeight } = e.target.documentElement;
+
+        if (scrollTop + clientHeight >= scrollHeight - 50 && !isLoading) {
+            setPage(prev => prev + 1);
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
+    if (isLoading) return <h1>Загрузка...</h1>;
+    if (error) return <h1>Ошибка: {error}</h1>;
+
+    let videosList = allVideos.map(v => (
+        <Video key={v.id} title={v.name} channelName={v.channelName} preview={v.preview} channelImage={v.channelImage} />
     ));
 
     return (
