@@ -41,7 +41,7 @@ function MainLayout() {
         <div className={m.app}>
             <Header />
             <div className={m.container}>
-                <Navbar navbar={store.menuItems} />
+                <Navbar />
                 <Content content={store.content} menuItems={store.menuItems} />
                 <Outlet />
             </div>

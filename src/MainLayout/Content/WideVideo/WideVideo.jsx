@@ -11,10 +11,10 @@ function WideVideo(props) {
                     <p className={m.title}>{props.title}</p>
                     <div className={m.nameViews}>
                         <p>{props.channelName}</p>
-                        <p>{props.channelName}</p>
+                        <p>{props.views}</p>
                     </div>
                 </div>
-                <p className={m.description}>Достаточно развёрнутое описание данного видео...</p>
+                <p className={m.description}>{props.description}</p>
             </div>
             <div className={m.buttons}>
                 <button className={m.deleteButton}></button>

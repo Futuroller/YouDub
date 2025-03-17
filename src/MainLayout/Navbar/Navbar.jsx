@@ -15,7 +15,7 @@ function Navbar(props) {
         { id: 4, title: 'Ваш канал', picture: '../images/yourVideosIcon.png', navigation: '/main/my-channel' },
         { id: 5, title: 'Смотреть позже', picture: '../images/watchLaterIcon.png ' },
         { id: 6, title: 'Понравившиеся', picture: '../images/likedVideoIcon.png' },
-        { id: 7, title: 'Плейлисты', picture: '../images/playlistsIcon.png' }
+        { id: 7, title: 'Плейлисты', picture: '../images/playlistsIcon.png', navigation: '/main/playlists' }
     ]);
 
     const [followChannels, setFollowChannels] = useState([

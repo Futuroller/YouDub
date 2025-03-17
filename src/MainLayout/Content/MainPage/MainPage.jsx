@@ -1,4 +1,4 @@
-import { fetchVideos, fetchMyVideos, clearVideos } from '../../../store/slices/videosSlice';
+import { fetchVideos, clearVideos } from '../../../store/slices/videosSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import Video from '../Video/Video';
@@ -31,7 +31,7 @@ function MainPage(props) {
         };
     }, []);
 
-    if (isLoading) return <h1>Загрузка...</h1>;
+    if (isLoading) return <h1 className={m.loadingData}>Загрузка...</h1>;
     if (error) return <h1>Ошибка: {error}</h1>;
 
     let videosList = allVideos.map(v => (

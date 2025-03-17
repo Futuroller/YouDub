@@ -11,10 +11,10 @@ function ChannelHeader(props) {
                 <div className={m.channelInfo}>
                     <p className={m.channelName}>{user.username}</p>
                     <div className={m.tagAndStat}>
-                        <p>0 подписчиков</p>
-                        <p>0 видео</p>
+                        <p>{user.subscribersCount} подписчик</p>
+                        <p>{user.subscriptionsCount} подписка</p>
                     </div>
-                    <p className={m.aboutChannel}>О канале...</p>
+                    <p className={m.aboutChannel}>{user.description}...О канале</p>
                 </div>
                 <div className={m.buttonContainer}>
                     <button>Настроить вид канала</button>

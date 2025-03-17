@@ -1,6 +1,8 @@
+import { fetchHistory, clearVideos } from '../../../store/slices/videosSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
 import WideVideo from '../WideVideo/WideVideo';
 import SideMenu from './SideMenu/SideMenu';
-import { useState } from 'react';
 import m from './ViewHistory.module.css'
 
 function ViewHistory(props) {
@@ -10,8 +12,37 @@ function ViewHistory(props) {
         { id: 2, title: 'Не сохранять историю просмотра', picture: '../images/pause.png' }
     ]);
 
-    let videosList = props.content.videos.map(v => (
-        <WideVideo key={v.id} title={v.title} channelName={v.channelName} preview={v.preview} channelImage={v.channelImage} />
+    const dispatch = useDispatch();
+    const { watchHistory, isLoading, error } = useSelector(state => state.videos);
+    const { id } = useSelector(state => state.user);
+
+    const [page, setPage] = useState(1);
+
+    useEffect(() => {
+        dispatch(fetchHistory({ page, limit: 10, id }));
+    }, [page]);
+
+    const handleScroll = (e) => {
+        const { scrollTop, clientHeight, scrollHeight } = e.target.documentElement;
+
+        if (scrollTop + clientHeight >= scrollHeight - 50 && !isLoading) {
+            setPage(prev => prev + 1);
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
+    if (isLoading) return <h1 className={m.loadingData}>Загрузка...</h1>;
+    if (error) return <h1>Ошибка: {error}</h1>;
+
+    let videosList = watchHistory.map(v => (
+        <WideVideo key={v.id} title={v.name} channelName={v.owner_username} preview={v.preview} description={v.description} views={v.views} />
     ));
 
     return (

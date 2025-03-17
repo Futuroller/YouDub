@@ -16,7 +16,7 @@ export const fetchVideos = createAsyncThunk(
     'videos/fetchVideos',
     async ({ page, limit }) => {
         const response = await apiRequest('/main/videos', 'POST', { page, limit });
-        console.log(response.videos)
+        console.log(response);
         return response.videos;
     }
 );
@@ -27,6 +27,15 @@ export const fetchMyVideos = createAsyncThunk(
         const response = await apiRequest(`videos/my/${userId}`);
         return response.videos;
     }
+)
+
+export const fetchHistory = createAsyncThunk(
+  'videos/fetchHistory',
+  async ({ page, limit, userId }) => {
+      const response = await apiRequest(`/main/history`, 'POST', { page, limit, userId });
+      console.log(response);
+      return response.videos;
+  }
 )
 
 const videosSlice = createSlice({
@@ -68,7 +77,25 @@ const videosSlice = createSlice({
           .addCase(fetchMyVideos.rejected, (state, action) => {
             state.isLoading = false;
             state.error = action.error.message;
-          });
+          })
+
+          // ✅ Подгрузка истории просмотра (ленивая загрузка)
+          .addCase(fetchHistory.pending, (state) => {
+            state.isLoading = true;
+          })
+          .addCase(fetchHistory.fulfilled, (state, action) => {
+            state.isLoading = false;
+            const newVideos = action.payload;
+            // Фильтруем новые видео, чтобы не добавлять уже существующие
+            const uniqueVideos = newVideos.filter(video => 
+                !state.watchHistory.some(existingVideo => existingVideo.id === video.id)
+            );
+            state.watchHistory = [...state.watchHistory, ...uniqueVideos]; // Лениво загружаем видео
+          })
+          .addCase(fetchHistory.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = action.error.message;
+          })
       }
     });
 
