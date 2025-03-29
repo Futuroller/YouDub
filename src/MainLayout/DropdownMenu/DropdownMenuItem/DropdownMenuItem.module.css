@@ -1,0 +1,28 @@
+.container {
+    background: #363636;
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    align-items: center;
+    height: 50px;
+    cursor: pointer;
+
+}
+
+.container:hover {
+    background: #4d4d4d;
+}
+
+.itemImage {
+    width: 25px;
+    height: 25px;
+    object-fit: cover;
+    padding-left: 10px;
+    padding-right: 5px;
+}
+
+.text {
+    color: white;
+    font-size: 20px;
+    margin-left: 5px;
+}

@@ -1,7 +1,7 @@
 import Video from '../Video/Video';
-import m from './SubscriptionVideos.module.css'
+import m from './AnyVideos.module.css'
 
-function SubscriptionVideos(props) {
+function AnyVideos(props) {
 
     let videosList = props.content.videos.map(v => (
         <Video key={v.id} title={v.title} channelName={v.channelName} preview={v.preview} channelImage={v.channelImage} />
@@ -9,7 +9,7 @@ function SubscriptionVideos(props) {
 
     return (
         <div className={m.container}>
-            <p className={m.title}>Новое</p>
+            <p className={m.title}>{props.title}</p>
             <div className={m.videosContainer}>
                 {videosList}
             </div>
@@ -18,4 +18,4 @@ function SubscriptionVideos(props) {
     );
 }
 
-export default SubscriptionVideos;
+export default AnyVideos;

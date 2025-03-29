@@ -1,9 +1,10 @@
-import { fetchHistory, clearVideos } from '../../../store/slices/videosSlice';
+import { fetchHistory, clearVideos, removeHistoryVideo } from '../../../store/slices/videosSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import WideVideo from '../WideVideo/WideVideo';
 import SideMenu from './SideMenu/SideMenu';
 import m from './ViewHistory.module.css'
+import apiRequest from '../../../api/apiRequest';
 
 function ViewHistory(props) {
 
@@ -14,12 +15,11 @@ function ViewHistory(props) {
 
     const dispatch = useDispatch();
     const { watchHistory, isLoading, error } = useSelector(state => state.videos);
-    const { id } = useSelector(state => state.user);
 
     const [page, setPage] = useState(1);
 
     useEffect(() => {
-        dispatch(fetchHistory({ page, limit: 10, id }));
+        dispatch(fetchHistory({ page, limit: 10 }));
     }, [page]);
 
     const handleScroll = (e) => {
@@ -42,7 +42,7 @@ function ViewHistory(props) {
     if (error) return <h1>Ошибка: {error}</h1>;
 
     let videosList = watchHistory.map(v => (
-        <WideVideo key={v.id} title={v.name} channelName={v.owner_username} preview={v.preview} description={v.description} views={v.views} />
+        <WideVideo key={v.id} id={v.id} title={v.name} channelName={v.owner_username} preview={v.preview} description={v.description} views={v.views} />
     ));
 
     return (

@@ -1,7 +1,7 @@
 import API_URL from "../config";
 
-export default async function apiRequest(endpoint, method, body = null) {
-    const headers = { 'Content-Type': 'application/json'};
+export default async function apiRequest(endpoint, method, body = null, isFile = null) {
+    const headers = {};
     const token = localStorage.getItem('token');
 
     if (token) {
@@ -10,7 +10,14 @@ export default async function apiRequest(endpoint, method, body = null) {
     
     const options = { method, headers, credentials: 'include' };
 
-    if (body) options.body = JSON.stringify(body);
+    if (body) {
+        if (isFile) {
+            options.body = body;
+        } else {
+            headers['Content-Type'] = 'application/json';
+            options.body = JSON.stringify(body);
+        }
+    }
 
     try {
         const response = await fetch(`${API_URL}${endpoint}`, options);

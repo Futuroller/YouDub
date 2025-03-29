@@ -16,24 +16,22 @@ export const fetchVideos = createAsyncThunk(
     'videos/fetchVideos',
     async ({ page, limit }) => {
         const response = await apiRequest('/main/videos', 'POST', { page, limit });
-        console.log(response);
         return response.videos;
     }
 );
 
 export const fetchMyVideos = createAsyncThunk(
     'videos/fetchMyVideos',
-    async (userId) => {
-        const response = await apiRequest(`videos/my/${userId}`);
-        return response.videos;
-    }
+    async ({ page, limit }) => {
+      const response = await apiRequest('/main/videos/my-channel', 'POST', { page, limit });
+      return response.myVideos;
+  }
 )
 
 export const fetchHistory = createAsyncThunk(
   'videos/fetchHistory',
-  async ({ page, limit, userId }) => {
-      const response = await apiRequest(`/main/history`, 'POST', { page, limit, userId });
-      console.log(response);
+  async ({ page, limit }) => {
+      const response = await apiRequest(`/main/history`, 'POST', { page, limit });
       return response.videos;
   }
 )
@@ -43,7 +41,10 @@ const videosSlice = createSlice({
     initialState,
     reducers: {
         clearVideos: (state) => {
-            state.allVideos = []; // Очищаем массив при смене страницы
+          state.allVideos = []; // Очищаем массив при смене страницы
+        },
+        removeHistoryVideo: (state, action) => {
+          state.watchHistory = state.watchHistory.filter(video => video.id !== action.payload);
         }
     },
     extraReducers: (builder) => {
@@ -72,7 +73,12 @@ const videosSlice = createSlice({
           })
           .addCase(fetchMyVideos.fulfilled, (state, action) => {
             state.isLoading = false;
-            state.myVideos = action.payload; // Просто перезаписываем массив
+            const newVideos = action.payload;
+            // Фильтруем новые видео, чтобы не добавлять уже существующие
+            const uniqueVideos = newVideos.filter(video => 
+                !state.myVideos.some(existingVideo => existingVideo.id === video.id)
+            );
+            state.myVideos = [...state.myVideos, ...uniqueVideos]; // Лениво загружаем видео
           })
           .addCase(fetchMyVideos.rejected, (state, action) => {
             state.isLoading = false;
@@ -99,7 +105,7 @@ const videosSlice = createSlice({
       }
     });
 
-export const { clearVideos } = videosSlice.actions;
+export const { clearVideos, removeHistoryVideo } = videosSlice.actions;
 
 export default videosSlice.reducer;
     

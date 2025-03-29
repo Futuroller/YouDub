@@ -8,6 +8,7 @@ import m from './SignUpPage.module.css';
 function SignUpPage(props) {
 
     const navigate = useNavigate();
+    const [isInProcess, setIsInProcess] = useState(false);
 
     const [authFieldsData, setAuthFieldsData] = useState([
         { id: 1, type: 'text', fieldTitle: 'Имя пользователя', placeholder: 'dubinsky', value: '' },
@@ -29,44 +30,47 @@ function SignUpPage(props) {
 
     const signUp = async (event) => {
         event.preventDefault();
+        if (!isInProcess) {
+            setIsInProcess(true);
+            const data = {
+                username: authFieldsData[0].value,
+                email: authFieldsData[1].value,
+                password: authFieldsData[2].value,
+            };
 
-        const data = {
-            username: authFieldsData[0].value,
-            email: authFieldsData[1].value,
-            password: authFieldsData[2].value,
-        };
+            const passwordRepeat = authFieldsData[3].value;
 
-        const passwordRepeat = authFieldsData[3].value;
+            if (data.username.length >= 3) {
+                if (data.password.length >= 8) {
+                    if (data.password === passwordRepeat) {
+                        try {
+                            const response = await apiRequest('/auth/signup', 'POST', data);
 
-        if (data.username.length >= 3) {
-            if (data.password.length >= 8) {
-                if (data.password === passwordRepeat) {
-
-                    try {
-                        const response = await apiRequest('/auth/signup', 'POST', data);
-
-                        if (response.status === 201) {
-                            alert('Аккаунт создан. Активируйте его на вашем email-адресе');
-                            navigate('/auth/login');
-                        } else {
-                            alert('Ошибка при создании аккаунта');
+                            if (response.status === 201) {
+                                alert('Аккаунт создан. Активируйте его на вашем email-адресе');
+                                navigate('/auth/login');
+                            } else {
+                                alert('Ошибка при создании аккаунта');
+                            }
+                        } catch (error) {
+                            console.error('Ошибка:', error);
+                            alert('Ошибка сервера');
+                        } finally {
+                            setIsInProcess(false);
                         }
-                    } catch (error) {
-                        console.error('Ошибка:', error);
-                        alert('Ошибка сервера');
-                    }
 
+                    } else {
+                        alert("Пароли не совпадают");
+                        return;
+                    }
                 } else {
-                    alert("Пароли не совпадают");
+                    alert("Длина пароля должна быть не менее 8-ми символов");
                     return;
                 }
             } else {
-                alert("Длина пароля должна быть не менее 8-ми символов");
+                alert("Длина логина должна быть не менее 3-х символов");
                 return;
             }
-        } else {
-            alert("Длина логина должна быть не менее 3-х символов");
-            return;
         }
     };
 

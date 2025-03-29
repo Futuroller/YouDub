@@ -2,6 +2,7 @@
     display: flex;
     height: 100%;
     align-items: center;
+    cursor: pointer;
 }
 
 .channelImage {
@@ -19,4 +20,8 @@
     color: white;
     user-select: none;
     text-wrap: nowrap;
+}
+
+.menuContainer {
+    position: relative;
 }

@@ -6,12 +6,16 @@ import { Outlet, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUser } from '../store/slices/userSlice';
 import apiRequest from '../api/apiRequest';
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 function MainLayout() {
 
+    const user = useSelector(state => state.user);
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [isFetched, setIsFetched] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem('token'); // Получаем токен из localStorage
@@ -20,21 +24,33 @@ function MainLayout() {
             navigate('/auth/login');
             return;
         }
+
+        if (isFetched) return;
+        if (isLoading || user?.id) return;
+
         const getUserData = async () => {
             try {
+                setIsLoading(true);
                 const response = await apiRequest('/main', 'GET'); // Запрос к серверу для получения данных пользователя
+
                 if (response.status === 200) {
                     dispatch(setUser(response)); // Обновляем состояние Redux
+                    setIsFetched(true);
                 } else {
+                    alert('Время сессии вышло');
+                    navigate('/auth/login');
                     console.error('Ошибка при получении данных пользователя:', response.message);
                 }
             } catch (error) {
                 console.error('Ошибка при запросе данных пользователя:', error);
+                navigate('/auth/login');
+            } finally {
+                setIsLoading(false);
             }
         };
 
         getUserData();
-    }, [dispatch, navigate]);
+    }, [dispatch, navigate, user, isFetched, isLoading]);
 
 
     return (
@@ -42,7 +58,7 @@ function MainLayout() {
             <Header />
             <div className={m.container}>
                 <Navbar />
-                <Content content={store.content} menuItems={store.menuItems} />
+                <Content content={store.content} />
                 <Outlet />
             </div>
         </div>
