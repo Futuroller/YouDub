@@ -39,8 +39,10 @@ function EditChannel(props) {
     const onCancelClick = () => {
         setChannelName(user.username);
         setChannelDescription(user.description);
-        setAvatar(user.avatar_url);
-        setAvatarPreview(user.avatar_url);
+        setAvatarPreview(user.avatar_url ? `${API_URL_FILES}/avatars/${user.avatar_url}` : '../../../../images/userDefault.png');
+        setHeaderPreview(user.channel_header_url ? `${API_URL_FILES}/headers/${user.channel_header_url}` : '../../../../images/channelHeader.jpg');
+        setAvatar(null);
+        setHeader(null);
     };
 
     const onImageChange = (e, subject) => {
@@ -94,8 +96,8 @@ function EditChannel(props) {
     const onDeleteImage = async (subject) => {
         const answer = confirm('Вы уверены что хотите удалить изображение?');
         if (!answer) return;
-        const avatar_url = null;
-        const channel_header_url = null;
+        const avatar_url = user.avatar_url;
+        const channel_header_url = user.channel_header_url;
         const data = subject === 'avatar' ? { avatar_url } : { channel_header_url }
         try {
             const response = await apiRequest(`/main/user/configure`, 'DELETE', data);
@@ -147,6 +149,7 @@ function EditChannel(props) {
                             <img src={'../../images/basket.png'} className={m.trashbox}></img>
                         </div>
                     </div>
+                    <p>Рекомендуемый размер - 1500x450px</p>
                 </div>
                 <div className={m.changeButtons}>
                     <button className={m.headerButton} style={{ marginBottom: '30px' }} onClick={onCancelClick}>Отменить</button>

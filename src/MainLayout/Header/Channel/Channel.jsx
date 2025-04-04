@@ -9,6 +9,14 @@ function Channel() {
     const user = useSelector((state) => state.user);
     const navigate = useNavigate();
 
+    const goMyChannelHandler = () => {
+        navigate('/main/my-channel');
+    };
+
+    const goSettingsHandler = () => {
+        navigate('/main/my-channel/configure-channel');
+    };
+
     const leaveAccHandler = () => {
         const answer = confirm('Вы уверены что хотите выйти из аккаунта?');
         if (answer) {
@@ -17,13 +25,9 @@ function Channel() {
         }
     };
 
-    const goMyChannelHandler = () => {
-        navigate('/main/my-channel');
-    };
-
     const [menuItems, setMenuItems] = useState([
         { id: 1, text: 'Перейти на канал', picture: '../../../images/mainIcon.png', onClickHandler: goMyChannelHandler },
-        { id: 2, text: 'Настройки', picture: '../../../images/followChannelsIcon.png' },
+        { id: 2, text: 'Настройки', picture: '../../../images/followChannelsIcon.png', onClickHandler: goSettingsHandler },
         { id: 3, text: 'Выйти из аккаунта', picture: '../../../images/followChannelsIcon.png', onClickHandler: leaveAccHandler }
     ]);
 

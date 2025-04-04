@@ -1,0 +1,17 @@
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.title {
+    font-size: 32px;
+    margin-bottom: 10px;
+    font-weight: 700;
+    color: white;
+}
+
+.container select {
+    width: 400px;
+    height: 35px;
+    border-radius: 5px;
+}

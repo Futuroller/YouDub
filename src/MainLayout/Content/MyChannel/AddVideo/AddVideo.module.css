@@ -4,27 +4,28 @@
     height: 100%;
 }
 
-.avatarContainer {
-    width: 330px;
+.videoContainer {
+    width: 700px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
 }
 
-.avatarSubContainer {
+.videoSubContainer {
     position: relative;
-    height: 200px;
-    width: 200px;
+    height: 169px;
+    width: 300px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.avatar {
-    width: 200px;
-    height: 100%;
-    border-radius: 100px;
+.video {
+    width: 300px;
+    height: 169px;
+    border-radius: 15px;
+    object-fit: cover;
 }
 
 .edit {
@@ -34,12 +35,12 @@
     z-index: 2;
 }
 
-.avatarSubContainer::before {
+.videoSubContainer::before {
     content: '';
     z-index: 1;
     width: 100%;
     height: 100%;
-    border-radius: 100px;
+    border-radius: 15px;
     display: block;
     position: absolute;
     background: rgba(0, 0, 0, 0.5);
@@ -73,10 +74,14 @@
 
 .otherInfoContainer {
     width: 100%;
-    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+}
+
+.otherInfoContainer input,
+textarea {
+    color: white;
 }
 
 .title {
@@ -103,7 +108,8 @@
 }
 
 .headerContainer {
-    width: 750px;
+    width: 600px;
+    height: 225px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -111,8 +117,8 @@
 
 .headerSubContainer {
     position: relative;
-    height: 200px;
-    width: 100%;
+    width: 480px;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -150,8 +156,7 @@
 }
 
 .headerButton {
-    margin: 5px;
-    width: 130px;
+    margin: 15px;
 }
 
 .changeButtons {

@@ -1,8 +1,0 @@
-.container {
-    display: flex;
-    position: relative;
-    justify-content: flex-start;
-    align-items: center;
-    height: 100px;
-    width: 75%;
-}

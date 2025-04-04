@@ -1,3 +1,6 @@
+import { API_URL_FILES } from '../../../config';
+import getTimeline from '../../../utils/getTimeline';
+import setWordEnding from '../../../utils/setWordEnding';
 import m from './Video.module.css'
 
 function Video(props) {
@@ -7,13 +10,13 @@ function Video(props) {
             <img src={props.preview} className={m.preview}></img>
 
             <div className={m.underPreview}>
-                <img src={props.channelImage} className={m.channelImage}></img>
+                <img src={props.channelImage ? `${API_URL_FILES}avatars/${props.channelImage}` : '../../../../images/userDefault.png'} className={m.channelImage}></img>
                 <div className={m.videoDescription}>
                     <p className={m.title}>{props.title}</p>
                     <p className={m.channelName}>{props.channelName}</p>
                     <div className={m.stats}>
-                        <p>0 просмотров</p>
-                        <p>1 день назад</p>
+                        <p>{setWordEnding(props.views, 'просмотр', '', 'а', 'ов')}</p>
+                        <p>{getTimeline(props.loadDate)}</p>
                     </div>
                 </div>
             </div>

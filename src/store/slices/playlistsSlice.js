@@ -4,8 +4,8 @@ import apiRequest from '../../api/apiRequest';
 const initialState = {
   allPlaylists: [],
   otherPlaylists: [],
-  historyPlaylist: [],
-  watchLaterPlaylist: [],
+  watchLaterPlaylist: null,
+  likedPlaylist: null,
   
   status: {
       isLoading: false,
@@ -14,11 +14,10 @@ const initialState = {
   }
 };
 
-export const fetchPlaylists = createAsyncThunk(
+export const fetchAllPlaylists = createAsyncThunk(
     'playlists/fetchPlaylists',
     async () => {
         const response = await apiRequest('/main/playlists', 'GET');
-        console.log(response.playlists);
         return response.playlists;
     }
 );
@@ -29,23 +28,22 @@ const playlistsSlice = createSlice({
     reducers: {
         clearPlaylists: (state) => {
             state.allPlaylists = []; // Очищаем массив при смене страницы
-        }
+        },
     },
     extraReducers: (builder) => {
       builder
-        .addCase(fetchPlaylists.pending, (state) => {
+        .addCase(fetchAllPlaylists.pending, (state) => {
             state.status.isLoading = true;
             state.status.error = null; 
         })
-        .addCase(fetchPlaylists.fulfilled, (state, action) => {
+        .addCase(fetchAllPlaylists.fulfilled, (state, action) => {
             state.status.isLoading = false;
             state.status.success = true;
-            const uniquePlaylists = action.payload.filter(playlist =>
-                !state.allPlaylists.some(existing => existing.id === playlist.id)
-            );
-            state.allPlaylists = [...state.allPlaylists, ...uniquePlaylists];
+            state.allPlaylists = action.payload;
+            state.watchLaterPlaylist = action.payload.find(p => p.name === 'Смотреть позже') || null;
+            state.likedPlaylist = action.payload.find(p => p.name === 'Понравившиеся') || null;
         })
-        .addCase(fetchPlaylists.rejected, (state, action) => {
+        .addCase(fetchAllPlaylists.rejected, (state, action) => {
             state.status.isLoading = false;
             state.status.error = action.payload || 'Ошибка при загрузке плейлистов';
         });

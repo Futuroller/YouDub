@@ -2,7 +2,6 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-bottom: 7%;
 }
 
 .label {
@@ -25,4 +24,13 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.buttonsContainer {
+    display: flex;
+    position: relative;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100px;
+    width: 75%;
 }

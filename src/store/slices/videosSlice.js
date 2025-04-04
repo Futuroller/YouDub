@@ -26,7 +26,7 @@ export const fetchMyVideos = createAsyncThunk(
       const response = await apiRequest('/main/videos/my-channel', 'POST', { page, limit });
       return response.myVideos;
   }
-)
+);
 
 export const fetchHistory = createAsyncThunk(
   'videos/fetchHistory',
@@ -34,7 +34,15 @@ export const fetchHistory = createAsyncThunk(
       const response = await apiRequest(`/main/history`, 'POST', { page, limit });
       return response.videos;
   }
-)
+);
+
+export const fetchVideosFromPlaylist = createAsyncThunk(
+  'videos/fetchVideosFromPlaylist',
+  async (playlist_url, { page, limit }) => {
+      const response = await apiRequest(`/main/playlists/${playlist_url}`, 'POST', { page, limit });
+      return response.videos;
+  }
+);
 
 const videosSlice = createSlice({
     name: 'videos',
@@ -45,6 +53,9 @@ const videosSlice = createSlice({
         },
         removeHistoryVideo: (state, action) => {
           state.watchHistory = state.watchHistory.filter(video => video.id !== action.payload);
+        },
+        clearPlaylist: (state) => {
+          state.playlists = [];
         }
     },
     extraReducers: (builder) => {
@@ -102,10 +113,29 @@ const videosSlice = createSlice({
             state.isLoading = false;
             state.error = action.error.message;
           })
+
+          // Подгрузка плейлистов (ленивая загрузка)
+          .addCase(fetchVideosFromPlaylist.pending, (state) => {
+            state.isLoading = true;
+          })
+          .addCase(fetchVideosFromPlaylist.fulfilled, (state, action) => {
+            state.isLoading = false;
+            const newVideos = action.payload;
+            // Фильтруем новые видео, чтобы не добавлять уже существующие
+            if (!action.payload) return;
+            const uniqueVideos = newVideos.filter(video => 
+                !state.playlists.some(existingVideo => existingVideo.id === video.id)
+            );
+            state.playlists = [...state.playlists, ...uniqueVideos]; // Лениво загружаем видео
+          })
+          .addCase(fetchVideosFromPlaylist.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = action.error.message;
+          })
       }
     });
 
-export const { clearVideos, removeHistoryVideo } = videosSlice.actions;
+export const { clearVideos, clearPlaylist, removeHistoryVideo } = videosSlice.actions;
 
 export default videosSlice.reducer;
     

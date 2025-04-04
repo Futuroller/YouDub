@@ -2,7 +2,7 @@ import m from './MyChannelButton.module.css'
 
 function MyChannelButton(props) {
     return (
-        <button className={m.myChannelButton}>{props.buttonText}</button>
+        <button className={m.myChannelButton} onClick={props.OnClickHandler}>{props.buttonText}</button>
     );
 }
 

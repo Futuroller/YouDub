@@ -1,4 +1,4 @@
-import { fetchPlaylists, clearPlaylists } from '../../../store/slices/playlistsSlice';
+import { fetchAllPlaylists, clearPlaylists } from '../../../store/slices/playlistsSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import Video from '../Video/Video';
@@ -10,7 +10,7 @@ function PlaylistsPage() {
     const { allPlaylists, status } = useSelector(state => state.playlists);
 
     useEffect(() => {
-        dispatch(fetchPlaylists());
+        dispatch(fetchAllPlaylists());
 
         return () => {
             dispatch(clearPlaylists());
@@ -32,6 +32,8 @@ function PlaylistsPage() {
                         channelName={p.channelName}
                         preview={p.preview}
                         channelImage={p.channelImage}
+                        access_status={p.access_status}
+                        videosCount={p.videosCount}
                     />
                 ))}
             </div>

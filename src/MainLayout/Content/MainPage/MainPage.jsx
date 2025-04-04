@@ -35,7 +35,9 @@ function MainPage(props) {
     if (error) return <h1>Ошибка: {error}</h1>;
 
     let videosList = allVideos.map(v => (
-        <Video key={v.id} title={v.name} channelName={v.channelName} preview={v.preview} channelImage={v.channelImage} />
+        <Video key={v.id} title={v.name} channelName={v.owner_username}
+            preview={v.preview} channelImage={v.owner_channel_image}
+            views={v.views} loadDate={v.load_date} />
     ));
 
     return (
