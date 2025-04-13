@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import m from './MyChannel.module.css';
 import { fetchMyVideos } from '../../../store/slices/videosSlice';
 import { Outlet, useNavigate } from 'react-router-dom';
+import { API_URL_FILES } from '../../../config';
 
 function MyChannel(props) {
 
@@ -44,16 +45,17 @@ function MyChannel(props) {
 
     let videosList = myVideos.map(v => (
         <Video key={v.id} title={v.name} channelName={v.owner_username}
-            preview={v.preview} channelImage={v.owner_channel_image}
+            preview={v.preview_url ? `${API_URL_FILES}previews/${v.preview_url}` : '../../../images/preview.jpg'}
+            channelImage={v.owner_channel_image} url={v.url}
             views={v.views} loadDate={v.load_date} />
     ));
 
     return (
         <div className={m.container}>
             <div className={m.withoutVideoContainer}>
-                <ChannelHeader myChannel={props.content.videos[0]} />
+                <ChannelHeader />
                 <div className={m.buttonsContainer}>
-                    <MyChannelButton buttonText='Добавить видео' OnClickHandler={onAddVideoClick} />
+                    <MyChannelButton buttonText='Добавить видео' OnClickHandler={onAddVideoClick} icon='../../../images/addVideo.png' />
                     <MyChannelButton buttonText='Плейлисты' />
                 </div>
                 <Outlet />

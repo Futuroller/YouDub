@@ -4,9 +4,10 @@
     display: flex;
     flex-direction: column;
     border-radius: 10px;
-    background: #363636;
+    background: #131313;
     width: 250px;
     position: absolute;
     left: -50px;
     z-index: 100;
+    border: 1px solid #FF0149;
 }

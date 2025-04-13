@@ -3,6 +3,8 @@ import m from './ChannelHeader.module.css'
 import { useNavigate } from 'react-router-dom';
 import { API_URL_FILES } from '../../../../config';
 import setWordEnding from '../../../../utils/setWordEnding';
+import passPartOfText from '../../../../utils/passPartOfText';
+import MyChannelButton from '../MyChannelButton/MyChannelButton';
 
 function ChannelHeader(props) {
     const user = useSelector((state) => state.user);
@@ -10,13 +12,6 @@ function ChannelHeader(props) {
 
     const configureChannelHandler = () => {
         navigator('configure-channel');
-    };
-
-
-    const passPartOfText = (text) => {
-        if (!text) return;
-        text = text.length < 40 ? text : text.slice(0, 39) + '...';
-        return text;
     };
 
     return (
@@ -30,11 +25,11 @@ function ChannelHeader(props) {
                         <p>{setWordEnding(user.subscribersCount, 'подписчик', '', 'а', 'ов')}</p>
                         <p>{setWordEnding(user.subscriptionsCount, 'подпис', 'ка', 'ки', 'ок')}</p>
                     </div>
-                    <p className={m.description}>{passPartOfText(user.description)}</p>
+                    <p className={m.description}>{passPartOfText(user.description, 39)}</p>
                     <p className={m.aboutChannel}>О канале</p>
                 </div>
                 <div className={m.buttonContainer}>
-                    <button onClick={configureChannelHandler}>Настроить вид канала</button>
+                    <MyChannelButton buttonText='Настроить вид канала' OnClickHandler={configureChannelHandler} icon='../../../images/settings.png' />
                 </div>
             </div>
         </div>

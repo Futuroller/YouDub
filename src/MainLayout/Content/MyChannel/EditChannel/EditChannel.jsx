@@ -149,7 +149,7 @@ function EditChannel(props) {
                             <img src={'../../images/basket.png'} className={m.trashbox}></img>
                         </div>
                     </div>
-                    <p>Рекомендуемый размер - 1500x450px</p>
+                    <p>Рекомендуемый размер - 1500x400px</p>
                 </div>
                 <div className={m.changeButtons}>
                     <button className={m.headerButton} style={{ marginBottom: '30px' }} onClick={onCancelClick}>Отменить</button>

@@ -103,7 +103,7 @@
 }
 
 .headerContainer {
-    width: 750px;
+    width: fit-content;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -112,7 +112,7 @@
 .headerSubContainer {
     position: relative;
     height: 200px;
-    width: 100%;
+    width: 750px;
     display: flex;
     justify-content: center;
     align-items: center;

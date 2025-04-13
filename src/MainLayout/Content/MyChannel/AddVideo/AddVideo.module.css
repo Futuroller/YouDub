@@ -6,6 +6,7 @@
 
 .videoContainer {
     width: 700px;
+    margin-top: 40px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -149,6 +150,10 @@ textarea {
     border-radius: 20px;
 }
 
+.caption {
+    margin: 0;
+}
+
 .headerButtonsContainer {
     display: flex;
     flex-direction: column;
@@ -167,4 +172,36 @@ textarea {
     align-items: flex-end;
     align-self: flex-end;
     margin-right: 10%;
+}
+
+input[type="radio"] {
+    accent-color: #ff0149;
+    width: 25px;
+    height: 17px;
+}
+
+.radio {
+    font-size: 20px;
+}
+
+.tagsPreview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.tag {
+    background-color: #efefef;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 14px;
+    color: #333;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.tag:hover {
+    background-color: #e0e0e0;
 }

@@ -8,6 +8,7 @@ const initialState ={
     subscriptions: [],    // Видео с каналов, на которые подписан
     playlists: [],        // Плейлисты
     recommended: [],       // Рекомендации
+    currentVideo: {},
     isLoading: false,      // Лоадер
     error: null,
 };
@@ -18,6 +19,14 @@ export const fetchVideos = createAsyncThunk(
         const response = await apiRequest('/main/videos', 'POST', { page, limit });
         return response.videos;
     }
+);
+
+export const fetchVideoByUrl = createAsyncThunk(
+  'videos/fetchVideoByUrl',
+  async (video_url) => {
+      const response = await apiRequest(`/main/videos/${video_url}`, 'GET');
+      return response.video;
+  }
 );
 
 export const fetchMyVideos = createAsyncThunk(
@@ -56,6 +65,9 @@ const videosSlice = createSlice({
         },
         clearPlaylist: (state) => {
           state.playlists = [];
+        },
+        clearCurrentVideo: (state) => {
+          state.currentVideo = {};
         }
     },
     extraReducers: (builder) => {
@@ -132,10 +144,25 @@ const videosSlice = createSlice({
             state.isLoading = false;
             state.error = action.error.message;
           })
+          // Подгрузка плейлистов (ленивая загрузка)
+          .addCase(fetchVideoByUrl.pending, (state) => {
+            state.isLoading = true;
+          })
+          .addCase(fetchVideoByUrl.fulfilled, (state, action) => {
+            state.isLoading = false;
+            const currentVideo = action.payload;
+            // Фильтруем новые видео, чтобы не добавлять уже существующие
+            if (!action.payload) return;
+            state.currentVideo = {...currentVideo}; // Лениво загружаем видео
+          })
+          .addCase(fetchVideoByUrl.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = action.error.message;
+          })
       }
     });
 
-export const { clearVideos, clearPlaylist, removeHistoryVideo } = videosSlice.actions;
+export const { clearVideos, clearPlaylist, removeHistoryVideo, clearCurrentVideo } = videosSlice.actions;
 
 export default videosSlice.reducer;
     

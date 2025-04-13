@@ -1,0 +1,131 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    color: white;
+}
+
+.videoContainer {
+    height: 630px;
+    border-bottom: 2px solid #FF0149;
+}
+
+.nameAndStats {
+    display: flex;
+    justify-content: space-between;
+    width: 95%;
+    font-size: 22px;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-between;
+    min-width: 300px;
+    color: #8F8F8F;
+    font-size: 20px;
+}
+
+.leftStat {
+    padding-right: 20px;
+}
+
+.interactiveBlock {
+    display: flex;
+    justify-content: space-between;
+}
+
+.leftSide {
+    display: flex;
+    align-items: center;
+    width: 500px;
+}
+
+.myChannelButton {
+    background-color: #313131;
+    color: white;
+    font-size: smaller;
+    width: 170px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 3%;
+    font-size: 17px;
+    border-radius: 15px;
+    border: 1px solid #FF0149;
+}
+
+
+.options {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 80px;
+    height: 50px;
+    background-color: #313131;
+    border-radius: 30px;
+    border: 1px solid #FF0149;
+    padding-left: 10px;
+    padding-right: 10px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.playlists {
+    width: 40px;
+    height: 40px;
+}
+
+.plus {
+    width: 22px;
+    height: 22px;
+}
+
+.line {
+    margin: 25px;
+    width: 100%;
+    min-height: 1px;
+    background-color: #8F8F8F;
+    align-self: center;
+    border-radius: 2px;
+}
+
+.descpiptionContainer {
+    display: flex;
+    justify-content: flex-start;
+    width: 60%;
+    padding: 10px;
+    border-radius: 20px;
+    background-color: #222222;
+}
+
+.descpiption {
+    margin: 0px;
+}
+
+.leaveComment {
+    display: flex;
+    margin-bottom: 50px;
+}
+
+.channelImage {
+    width: 50px;
+    height: 50px;
+    border-radius: 35px;
+    margin-right: 10px;
+    object-fit: cover;
+}
+
+.commentField {
+    height: 30px;
+    width: 600px;
+    border-radius: 20px;
+    font-size: 16px;
+    padding: 10px;
+}
+
+.menuContainer {
+    position: relative;
+}

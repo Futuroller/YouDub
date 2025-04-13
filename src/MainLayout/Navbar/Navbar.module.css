@@ -1,13 +1,17 @@
 .nav {
     height: 100%;
-    width: 17%;
-    min-width: 250px;
+    width: 250px;
     display: flex;
     flex-direction: column;
     background-color: #000000;
     justify-content: flex-start;
     align-items: center;
-    /* border: 1px solid #FF0149; */
+    transition: ease 0.35s;
+
+    @media (max-width: 480px) {
+        transition: ease 0.35s;
+        width: 70px;
+    }
 }
 
 .menuItemContainer {
@@ -25,4 +29,13 @@ ol {
     width: 90%;
     height: 1px;
     background-color: #383838;
+}
+
+.collapsed {
+    transition: ease 0.35s;
+    width: 70px;
+}
+
+.collapsed .menuText {
+    display: none;
 }

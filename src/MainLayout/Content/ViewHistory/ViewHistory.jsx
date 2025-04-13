@@ -5,6 +5,7 @@ import WideVideo from '../WideVideo/WideVideo';
 import SideMenu from './SideMenu/SideMenu';
 import m from './ViewHistory.module.css'
 import apiRequest from '../../../api/apiRequest';
+import { API_URL_FILES } from '../../../config';
 
 function ViewHistory(props) {
 
@@ -42,7 +43,8 @@ function ViewHistory(props) {
     if (error) return <h1>Ошибка: {error}</h1>;
 
     let videosList = watchHistory.map(v => (
-        <WideVideo key={v.id} id={v.id} title={v.name} channelName={v.owner_username} preview={v.preview} description={v.description} views={v.views} />
+        <WideVideo key={v.id} id={v.id} title={v.name} preview={v.preview_url ? `${API_URL_FILES}previews/${v.preview_url}` : '../../../images/preview.jpg'}
+            channelName={v.owner_username} description={v.description} views={v.views} />
     ));
 
     return (

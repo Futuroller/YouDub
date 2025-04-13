@@ -18,7 +18,7 @@ const getTimeline = (date) => {
     } else if (monthsCount > 0) {
         result = setWordEnding(monthsCount, 'месяц', '', 'а', 'ев');
     } else if (weeksCount > 0) {
-        result = setWordEnding(weeksCount, 'недел', 'я', 'и', 'ь');
+        result = setWordEnding(weeksCount, 'недел', 'ю', 'и', 'ь');
     } else if (daysCount >= 2) {
         result = setWordEnding(daysCount, 'д', 'ень', 'ня', 'ней');
     } else if (daysCount == 1) {

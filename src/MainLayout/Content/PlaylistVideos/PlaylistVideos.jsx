@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import Video from '../Video/Video';
 import m from './PlaylistVideos.module.css'
 import { fetchVideosFromPlaylist, clearPlaylist } from '../../../store/slices/videosSlice';
+import { API_URL_FILES } from '../../../config';
 
 function PlaylistVideos(props) {
 
@@ -44,7 +45,8 @@ function PlaylistVideos(props) {
 
     let videosList = playlists.map(v => (
         <Video key={v.id} title={v.name} channelName={v.owner_username}
-            preview={v.preview} channelImage={v.owner_channel_image}
+            preview={v.preview_url ? `${API_URL_FILES}previews/${v.preview_url}` : '../../../images/preview.jpg'}
+            channelImage={v.owner_channel_image} url={v.url}
             views={v.views} loadDate={v.load_date} />)
     );
 

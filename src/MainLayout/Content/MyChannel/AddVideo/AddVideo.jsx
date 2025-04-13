@@ -1,26 +1,49 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { API_URL_FILES } from '../../../../config';
 import m from './AddVideo.module.css';
 import { setUser } from '../../../../store/slices/userSlice';
 import apiRequest from '../../../../api/apiRequest';
+import passPartOfText from '../../../../utils/passPartOfText';
 import ComboBox from './ComboBox/ComboBox';
+import Video from '../../Video/Video';
+import ReactPlayer from 'react-player';
+import PreloadVideo from './PreloadVideo/PreloadVideo';
 
 function AddVideo(props) {
     const user = useSelector((state) => state.user);
     const dispatch = useDispatch();
     const [video, setVideo] = useState();
+    const [videoPreviewUrl, setVideoPreviewUrl] = useState(null);
     const [videoName, setVideoName] = useState();
     const [videoDescription, setVideoDescription] = useState();
-    const [videoPreview, setVideoPreview] = useState(user.channel_header_url ? `${API_URL_FILES}/headers/${user.channel_header_url}` : '../../../../images/channelHeader.jpg');
-    const [videoTags, setVideoTags] = useState();
+    const [preview, setPreview] = useState();
+    const [showPreview, setShowPreview] = useState();
+    const [videoPlaylist, setVideoPlaylist] = useState();
+    const [videoCategory, setVideoCategory] = useState();
+    const [videoTags, setVideoTags] = useState([]);
+    const [rawTags, setRawTags] = useState('');
+    const [videoAccess, setVideoAccess] = useState();
+
+    const [playlists, setPlaylists] = useState([]);
+    const [categories, setCategories] = useState([]);
+
 
     useEffect(() => {
-        if (user) {
-            setVideoPreview(user.channel_header_url ? `${API_URL_FILES}/headers/${user.channel_header_url}` : '../../../../images/channelHeader.jpg');
-            setVideo(null);
+        const fetchData = async () => {
+            try {
+                const playlistsData = await apiRequest('/main/playlists', 'GET');
+                const categoriesData = await apiRequest('/main/categories', 'GET');
+
+                setPlaylists(playlistsData.playlists);
+                setCategories(categoriesData.categories);
+            } catch (error) {
+                console.log(error);
+                alert('Ошибка загрузки плейлистов');
+            }
         }
-    }, [user])
+
+        fetchData();
+    }, [])
 
     const onNameChange = (e) => {
         const text = e.target.value;
@@ -34,19 +57,35 @@ function AddVideo(props) {
 
     const onTagsChange = (e) => {
         const text = e.target.value;
-        setVideoTags(text);
+        setRawTags(text);
+
+        const tagsArray = text
+            .split(',')
+            .map(tag => tag.trim().toLowerCase())
+            .filter(tag => tag.length > 0);
+
+        setVideoTags(tagsArray);
+    };
+
+    const removeTag = (indexToRemove) => {
+        const newTags = videoTags.filter((_, index) => index !== indexToRemove);
+        setVideoTags(newTags);
+        setRawTags(newTags.join(', '));
     };
 
     const onCancelClick = () => {
-        setVideoPreview(user.channel_header_url ? `${API_URL_FILES}/headers/${user.channel_header_url}` : '../../../../images/channelHeader.jpg');
-        setAvatar(null);
+        setVideoName(null);
+        setVideoDescription(null);
+        setPreview(null);
+        setVideoTags(null);
         setVideo(null);
     };
 
     const onPreviewChange = (e) => {
         const file = e.target.files[0];
         if (file && ['image/png', 'image/jpeg', 'image/jpg'].includes(file.type)) {
-            setVideoPreview(file);
+            setPreview(file);
+            setShowPreview(URL.createObjectURL(file));
         } else {
             alert('Можно загружать только файлы PNG, JPEG, JPG');
         }
@@ -56,77 +95,84 @@ function AddVideo(props) {
         const file = e.target.files[0];
         if (file && ['video/mp4', 'video/webm'].includes(file.type)) {
             setVideo(file);
+            setVideoPreviewUrl(URL.createObjectURL(file));
         } else {
             alert('Можно загружать только файлы MP4 и WebM');
         }
     };
 
     const onSaveClick = async () => {
-        // const updatedFields = {};
+        if (!video || !videoName || !videoAccess || !videoCategory) {
+            alert('Пожалуйста, заполните обязательные поля: видео, название, доступ и категорию');
+            return;
+        }
 
-        // if (user.username !== channelName) updatedFields.username = channelName;
-        // if (user.description !== channelDescription) updatedFields.description = channelDescription;
+        const formData = new FormData();
+        formData.append('video', video);
+        formData.append('name', videoName);
+        formData.append('tags', JSON.stringify(videoTags));
+        formData.append('id_access', videoAccess);
+        formData.append('id_category', videoCategory.id);
+        if (videoDescription) {
+            formData.append('description', videoDescription);
+        }
 
-        // const formData = new FormData();
-        // if (avatar) formData.append('avatar', avatar);
-        // if (header) formData.append('header', header);
-        // Object.keys(updatedFields).forEach(key => formData.append(key, updatedFields[key]));
+        if (preview && preview instanceof File) {
+            formData.append('preview', preview);
+        }
 
-        // if (formData.entries().next().done) {
-        //     alert('Вы не внесли изменений');
-        //     return;
-        // }
+        if (videoPlaylist) {
+            formData.append('id_playlist', videoPlaylist.id);
+        }
 
-        // try {
-        //     const answer = confirm('Вы уверены что хотите сохранить изменения?');
-        //     if (!answer) return;
-        //     const response = await apiRequest(`/main/user/configure`, 'PATCH', formData, true);
+        try {
+            const answer = confirm('Вы уверены, что хотите загрузить видео?');
+            if (!answer) return;
 
-        //     if (response.status === 200) {
-        //         dispatch(setUser(response));
-        //         console.log(response)
-        //         alert('Данные обновлены');
-        //     } else {
-        //         console.log(`Ошибка: ${response.message}`);
-        //     }
-        // } catch (error) {
-        //     console.error(`Ошибка при обновлении профиля: ${error}`);
-        // }
+            const response = await apiRequest('/main/videos/upload', 'POST', formData, true);
+
+            if (response.status === 200) {
+                alert('Видео успешно загружено');
+                console.log(response)
+                // onCancelClick();
+            } else {
+                alert(`Ошибка загрузки: ${response.message || 'Неизвестная ошибка'}`);
+                console.log(response);
+            }
+        } catch (error) {
+            console.error('Ошибка при отправке видео:', error);
+            alert('Произошла ошибка при загрузке видео');
+        }
     };
 
-    const onDeleteImage = async (subject) => {
-        const answer = confirm('Вы уверены что хотите удалить изображение?');
-        if (!answer) return;
-        const avatar_url = user.avatar_url;
-        const channel_header_url = user.channel_header_url;
-        const data = subject === 'avatar' ? { avatar_url } : { channel_header_url }
-        try {
-            const response = await apiRequest(`/main/user/configure`, 'DELETE', data);
-            if (response.status == 200) {
-                dispatch(setUser(response));
-                console.log(response)
-                alert('Изображение удалёно');
-            } else {
-                console.log(`Ошибка: ${response.message}`);
-            }
-
-        } catch (error) {
-            alert('Ошибка удаления изображения');
-            console.log(error);
-        }
+    const onDeleteImage = () => {
+        setPreview(null);
+        setShowPreview(null);
     };
 
     return (
         <div className={m.container}>
             <div className={m.videoContainer}>
-                <div className={m.videoSubContainer}>
-                    <input type='file' accept='.mp4,.webm' hidden onChange={onVideoChange} className={m.fileSelect}></input>
-                    <img src={video} className={m.video}></img>
-                    <img src={'../../images/edit.png'} className={m.edit}></img>
-                </div>
-                <button className={m.headerButton} onClick={onCancelClick}>Опубликовать</button>
+                <PreloadVideo title={videoName} channelName={user.username}
+                    preview={showPreview || '../../../images/preview.jpg'} channelImage={user.avatar_url}
+                    views='0' loadDate={new Date()} description={videoDescription} />
+                <button className={m.headerButton} onClick={onSaveClick}>Опубликовать</button>
             </div>
             <div className={m.otherInfoContainer}>
+                <div>
+                    <p className={m.title}>Выберите видео</p>
+                    <input type='file' accept='.mp4,.webm' onChange={onVideoChange}></input>
+                    {videoPreviewUrl && (
+                        <div style={{ marginTop: '10px' }}>
+                            <ReactPlayer
+                                url={videoPreviewUrl}
+                                controls
+                                width="100%"
+                                height="300px"
+                            />
+                        </div>
+                    )}
+                </div>
                 <div>
                     <p className={m.title}>Название</p>
                     <input type='text' className={m.name} value={videoName} onChange={onNameChange}></input>
@@ -139,24 +185,49 @@ function AddVideo(props) {
                     <p className={m.title}>Превью</p>
                     <div className={m.headerContainer}>
                         <div className={m.headerSubContainer}>
-                            <input type='file' accept='.png,.jpeg,.jpg' hidden onChange={(e) => onPreviewChange(e, 'header')} className={m.fileSelect}></input>
-                            <img src={videoPreview} className={m.header}></img>
+                            <input type='file' accept='.png,.jpeg,.jpg' hidden onChange={(e) => onPreviewChange(e)} className={m.fileSelect}></input>
+                            <img src={showPreview || '../../../images/preview.jpg'} className={m.header}></img>
                             <img src={'../../images/edit.png'} className={m.edit}></img>
                         </div>
-                        <div className={m.trashboxContainer} style={{ marginLeft: '20px' }} onClick={() => onDeleteImage('header')}>
+                        <div className={m.trashboxContainer} style={{ marginLeft: '20px' }} onClick={() => onDeleteImage()}>
                             <img src={'../../images/basket.png'} className={m.trashbox}></img>
                         </div>
                     </div>
                     <p>Выберите картинку, которая будет привлекать зрителей</p>
                 </div>
-                <ComboBox title='Добавить в плейлист'></ComboBox>
-                <ComboBox title='Категория'></ComboBox>
+                <ComboBox title='Добавить в плейлист' onChange={setVideoPlaylist} options={playlists}></ComboBox>
+                <ComboBox title='Категория' onChange={setVideoCategory} options={categories}></ComboBox>
                 <div>
                     <p className={m.title}>Теги</p>
-                    <textarea className={m.description} value={videoTags} onChange={onTagsChange}></textarea>
+                    <textarea
+                        className={m.description}
+                        value={rawTags}
+                        onChange={onTagsChange}
+                        placeholder="Введите теги через запятую"
+                    />
+                    <p className={m.caption}>По тегам пользователи смогут найти ваше видео</p>
+                    <div className={m.tagsPreview}>
+                        {videoTags.map((tag, index) => (
+                            <span key={index} className={m.tag} onClick={() => removeTag(index)}>
+                                #{passPartOfText(tag, 85)} ✕
+                            </span>
+                        ))}
+                    </div>
                 </div>
+
+                <fieldset>
+                    <legend className={m.title}>Доступ к видео</legend>
+                    <label className={m.radio}>
+                        <input type="radio" name="answer" onChange={() => setVideoAccess(1)} />
+                        Открытый
+                    </label><br></br>
+                    <label className={m.radio}>
+                        <input type="radio" name="answer" onChange={() => setVideoAccess(2)} />
+                        Закрытый (доступно только вам)
+                    </label>
+                </fieldset>
                 <div className={m.changeButtons}>
-                    <button className={m.headerButton} style={{ marginBottom: '30px' }} onClick={onSaveClick}>Сохранить</button>
+                    <button className={m.headerButton} style={{ marginBottom: '30px' }} onClick={onCancelClick}>Отменить</button>
                 </div>
             </div>
         </div >

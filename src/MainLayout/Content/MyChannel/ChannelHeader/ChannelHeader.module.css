@@ -94,13 +94,6 @@
 }
 
 .subContainer button {
-    background-color: #313131;
-    color: white;
-    font-size: smaller;
     width: 50%;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 15px;
+    border: 1px solid #FF0149;
 }

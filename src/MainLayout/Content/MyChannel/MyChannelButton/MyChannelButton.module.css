@@ -1,5 +1,5 @@
 .myChannelButton {
-    background-color: #313131;
+    background-color: #1d1d1d;
     color: white;
     font-size: smaller;
     min-width: 200px;
@@ -10,4 +10,12 @@
     margin-right: 3%;
     font-size: 17px;
     border-radius: 15px;
+    padding: 0%;
+}
+
+.icon {
+    width: 25px;
+    height: 25px;
+    object-fit: cover;
+    padding-right: 15px;
 }

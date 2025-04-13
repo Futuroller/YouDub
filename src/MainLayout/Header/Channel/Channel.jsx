@@ -27,8 +27,8 @@ function Channel() {
 
     const [menuItems, setMenuItems] = useState([
         { id: 1, text: 'Перейти на канал', picture: '../../../images/mainIcon.png', onClickHandler: goMyChannelHandler },
-        { id: 2, text: 'Настройки', picture: '../../../images/followChannelsIcon.png', onClickHandler: goSettingsHandler },
-        { id: 3, text: 'Выйти из аккаунта', picture: '../../../images/followChannelsIcon.png', onClickHandler: leaveAccHandler }
+        { id: 2, text: 'Настройки', picture: '../../../images/settings.png', onClickHandler: goSettingsHandler },
+        { id: 3, text: 'Выйти из аккаунта', picture: '../../../images/exit.png', onClickHandler: leaveAccHandler }
     ]);
 
     const [isOpen, setIsOpen] = useState(false);

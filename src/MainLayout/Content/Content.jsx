@@ -8,6 +8,7 @@ import { Navigate } from 'react-router-dom';
 import { Routes, Route } from 'react-router-dom';
 import m from './Content.module.css';
 import PlaylistsPage from './PlaylistsPage/PlaylistsPage';
+import VideoPage from './VideoPage/VideoPage';
 
 function Content(props) {
     return (
@@ -15,13 +16,14 @@ function Content(props) {
             <Routes>
                 <Route path="/" element={<Navigate to="/main/mainpage" />} />
                 <Route path='mainpage/*' element={<MainPage />} />
-                <Route path='subscription-videos/*' element={<PlaylistVideos content={props.content} title='Новое' />} />
-                <Route path='my-channel/*' element={<MyChannel content={props.content} />} />
-                <Route path='my-channel/configure-channel' element={<EditChannel content={props.content} />} />
-                <Route path='my-channel/add-video' element={<AddVideo content={props.content} />} />
-                <Route path='history/*' element={<ViewHistory content={props.content} />} />
-                <Route path='playlists/' element={<PlaylistsPage content={props.content} />} />
-                <Route path='playlists/*' element={<PlaylistVideos content={props.content} />} />
+                <Route path='subscription-videos/*' element={<PlaylistVideos title='Новое' />} />
+                <Route path='my-channel/*' element={<MyChannel />} />
+                <Route path='my-channel/configure-channel' element={<EditChannel />} />
+                <Route path='my-channel/add-video' element={<AddVideo />} />
+                <Route path='history/*' element={<ViewHistory />} />
+                <Route path='playlists/' element={<PlaylistsPage />} />
+                <Route path='playlists/*' element={<PlaylistVideos />} />
+                <Route path='video/*' element={<VideoPage />} />
             </Routes>
         </div>
     );

@@ -1,0 +1,28 @@
+.container {
+    display: flex;
+    height: 80px;
+}
+
+.channelImage {
+    width: 70px;
+    height: 70px;
+    border-radius: 35px;
+    margin-right: 10px;
+    object-fit: cover;
+}
+
+.infoBlock {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.channelName {
+    margin: 0%;
+    text-wrap: nowrap;
+}
+
+.subs {
+    color: #CBCBCB;
+    margin: 0px;
+}

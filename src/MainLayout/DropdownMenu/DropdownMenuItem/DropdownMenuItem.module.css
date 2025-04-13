@@ -1,5 +1,5 @@
 .container {
-    background: #363636;
+    background: #131313;
     display: flex;
     justify-content: flex-start;
     width: 100%;
@@ -10,7 +10,7 @@
 }
 
 .container:hover {
-    background: #4d4d4d;
+    background: #272727;
 }
 
 .itemImage {

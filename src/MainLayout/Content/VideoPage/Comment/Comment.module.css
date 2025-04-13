@@ -1,0 +1,42 @@
+.container {
+    display: flex;
+}
+
+.channelImage {
+    width: 70px;
+    height: 70px;
+    border-radius: 35px;
+    margin-right: 20px;
+    object-fit: cover;
+}
+
+.comment {
+    width: 80%;
+    margin-bottom: 30px;
+}
+
+.topSide {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    margin-bottom: 5px;
+}
+
+.channelName {
+    margin: 0px;
+    font-size: 26px;
+    text-wrap: nowrap;
+}
+
+.timeAgo {
+    color: #CBCBCB;
+    margin: 0px;
+    text-wrap: nowrap;
+    margin-left: 30px;
+    margin-bottom: 5px;
+}
+
+.text {
+    margin: 0;
+    padding-bottom: 20px;
+}

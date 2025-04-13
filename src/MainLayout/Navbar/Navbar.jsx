@@ -7,6 +7,8 @@ import { fetchSubscribedChannels, clearChannels } from '../../store/slices/chann
 import { fetchAllPlaylists } from '../../store/slices/playlistsSlice';
 
 function Navbar(props) {
+    const isCollapsed = useSelector(state => state.ui.isNavbarCollapsed);
+
     const dispatch = useDispatch();
     const { subscribedChannels, status } = useSelector(state => state.channels);
     const { watchLaterPlaylist, likedPlaylist } = useSelector(state => state.playlists);
@@ -56,19 +58,19 @@ function Navbar(props) {
     // ]);
 
     let topMenuItems = topMenu.map(i => (
-        <NavLink key={i.id} to={i.navigation}> <MenuItem title={i.title} picture={i.picture} /></NavLink>
+        <NavLink key={i.id} to={i.navigation}> <MenuItem title={isCollapsed ? '' : i.title} picture={i.picture} /></NavLink>
     ));
 
     let middleMenuItems = middleMenu.map(i => (
-        <NavLink key={i.id} to={i.navigation}> <MenuItem title={i.title} picture={i.picture} /></NavLink>
+        <NavLink key={i.id} to={i.navigation}> <MenuItem title={isCollapsed ? '' : i.title} picture={i.picture} /></NavLink>
     ));
 
     let followChannelsItems = subscribedChannels.map(i => (
-        <NavLink key={i.id} to={i.navigation}> <MenuItem title={i.username} picture={i.avatar_url || '/images/userDefault.png'} /></NavLink>
+        <NavLink key={i.id} to={i.navigation}> <MenuItem title={isCollapsed ? '' : i.username} picture={i.avatar_url || '/images/userDefault.png'} /></NavLink>
     ));
 
     return (
-        <div className={m.nav}>
+        <div className={`${m.nav} ${isCollapsed ? m.collapsed : ''}`}>
             <ol>
                 {topMenuItems}
             </ol>

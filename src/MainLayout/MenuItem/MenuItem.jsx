@@ -4,7 +4,7 @@ function MenuItem(props) {
     return (
         <li className={m.container}>
             <img src={props.picture} className={m.itemImage}></img>
-            <p>{props.title}</p>
+            <p className={m.title}>{props.title}</p>
         </li>
     );
 }

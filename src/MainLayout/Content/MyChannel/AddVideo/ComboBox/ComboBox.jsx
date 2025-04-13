@@ -1,13 +1,17 @@
 import m from './ComboBox.module.css';
 
 function ComboBox(props) {
+    // console.log(props.options)
     return (
         <div className={m.container}>
             <p className={m.title}>{props.title}</p>
-            <select name="" id="">
-                <option value="">1</option>
-                <option value="">2</option>
-                <option value="">3</option>
+            <select onChange={(e) => props.onChange(props.options.find(opt => opt.id == e.target.value))}>
+                <option value="" >-- Выберите --</option>
+                {props.options.map((item) => (
+                    <option key={item.id} value={item.id}>
+                        {item.name}
+                    </option>
+                ))}
             </select>
         </div>
     );
