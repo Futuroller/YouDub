@@ -107,7 +107,7 @@
 
 .leaveComment {
     display: flex;
-    margin-bottom: 50px;
+    padding-bottom: 50px;
 }
 
 .channelImage {

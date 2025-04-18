@@ -1,7 +1,7 @@
 .container {
     height: 200px;
     width: 100%;
-    min-width: 400px;
+    min-width: 800px;
     margin-bottom: 1%;
     background-color: #22222275;
     display: flex;
@@ -10,7 +10,7 @@
 }
 
 .preview {
-    width: 50%;
+    min-width: 350px;
     height: 100%;
     object-fit: cover;
     border-radius: 15px;
@@ -19,7 +19,7 @@
 .videoInfo {
     display: flex;
     height: 100%;
-    width: 90%;
+    width: 60%;
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
@@ -102,6 +102,7 @@
 .buttons * {
     height: 50px;
     width: 50px;
+    z-index: 50;
 }
 
 .deleteButton {

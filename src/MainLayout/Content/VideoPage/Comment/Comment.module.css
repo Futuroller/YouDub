@@ -1,5 +1,10 @@
 .container {
     display: flex;
+    border-left: 3px solid #FF0149;
+    border-radius: 7px;
+    padding-left: 20px;
+    margin-bottom: 30px;
+
 }
 
 .channelImage {
@@ -12,7 +17,6 @@
 
 .comment {
     width: 80%;
-    margin-bottom: 30px;
 }
 
 .topSide {

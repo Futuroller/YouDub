@@ -13,6 +13,7 @@ function MyChannel(props) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { myVideos, isLoading, error } = useSelector(state => state.videos);
+    const isCollapsed = useSelector(state => state.ui.isNavbarCollapsed);
 
     const onAddVideoClick = () => {
         navigate('/main/my-channel/add-video');
@@ -44,7 +45,7 @@ function MyChannel(props) {
     if (error) return <h1>Ошибка: {error}</h1>;
 
     let videosList = myVideos.map(v => (
-        <Video key={v.id} title={v.name} channelName={v.owner_username}
+        <Video key={v.id} title={v.name} description={v.description} channelName={v.owner_username}
             preview={v.preview_url ? `${API_URL_FILES}previews/${v.preview_url}` : '../../../images/preview.jpg'}
             channelImage={v.owner_channel_image} url={v.url}
             views={v.views} loadDate={v.load_date} />
@@ -61,7 +62,7 @@ function MyChannel(props) {
                 <Outlet />
                 <p className={m.label}>Популярное</p>
             </div>
-            <div className={m.videos}>
+            <div className={`${m.videos} ${isCollapsed ? m.expanded : m.narrow}`}>
                 {videosList}
             </div>
         </div>

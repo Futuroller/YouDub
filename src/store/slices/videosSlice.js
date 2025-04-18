@@ -9,6 +9,7 @@ const initialState ={
     playlists: [],        // Плейлисты
     recommended: [],       // Рекомендации
     currentVideo: {},
+    reactionForCurrentVideo: {},
     isLoading: false,      // Лоадер
     error: null,
 };
@@ -25,7 +26,7 @@ export const fetchVideoByUrl = createAsyncThunk(
   'videos/fetchVideoByUrl',
   async (video_url) => {
       const response = await apiRequest(`/main/videos/${video_url}`, 'GET');
-      return response.video;
+      return [response.video, response.reaction];
   }
 );
 
@@ -62,6 +63,9 @@ const videosSlice = createSlice({
         },
         removeHistoryVideo: (state, action) => {
           state.watchHistory = state.watchHistory.filter(video => video.id !== action.payload);
+        },
+        clearHistoryVideos: (state, action) => {
+          state.watchHistory = [];
         },
         clearPlaylist: (state) => {
           state.playlists = [];
@@ -115,11 +119,13 @@ const videosSlice = createSlice({
           .addCase(fetchHistory.fulfilled, (state, action) => {
             state.isLoading = false;
             const newVideos = action.payload;
-            // Фильтруем новые видео, чтобы не добавлять уже существующие
+            
             const uniqueVideos = newVideos.filter(video => 
-                !state.watchHistory.some(existingVideo => existingVideo.id === video.id)
+              !state.watchHistory.some(existingVideo => existingVideo.id === video.id)
             );
-            state.watchHistory = [...state.watchHistory, ...uniqueVideos]; // Лениво загружаем видео
+
+            const combined = [...state.watchHistory, ...uniqueVideos];
+            state.watchHistory = combined.sort((a, b) => new Date(b.watched_at) - new Date(a.watched_at));          
           })
           .addCase(fetchHistory.rejected, (state, action) => {
             state.isLoading = false;
@@ -150,10 +156,12 @@ const videosSlice = createSlice({
           })
           .addCase(fetchVideoByUrl.fulfilled, (state, action) => {
             state.isLoading = false;
-            const currentVideo = action.payload;
+            const currentVideo = action.payload[0];
+            const reactionForCurrentVideo = action.payload[1];
             // Фильтруем новые видео, чтобы не добавлять уже существующие
             if (!action.payload) return;
             state.currentVideo = {...currentVideo}; // Лениво загружаем видео
+            state.reactionForCurrentVideo = {...reactionForCurrentVideo}; // Лениво загружаем видео
           })
           .addCase(fetchVideoByUrl.rejected, (state, action) => {
             state.isLoading = false;
@@ -162,7 +170,7 @@ const videosSlice = createSlice({
       }
     });
 
-export const { clearVideos, clearPlaylist, removeHistoryVideo, clearCurrentVideo } = videosSlice.actions;
+export const { clearVideos, clearPlaylist, clearHistoryVideos, removeHistoryVideo, clearCurrentVideo } = videosSlice.actions;
 
 export default videosSlice.reducer;
     

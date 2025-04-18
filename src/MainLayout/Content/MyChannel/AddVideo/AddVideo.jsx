@@ -74,10 +74,10 @@ function AddVideo(props) {
     };
 
     const onCancelClick = () => {
-        setVideoName(null);
-        setVideoDescription(null);
-        setPreview(null);
-        setVideoTags(null);
+        setVideoName();
+        setVideoDescription();
+        setPreview();
+        setVideoTags([]);
         setVideo(null);
     };
 

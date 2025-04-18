@@ -1,28 +1,18 @@
 import { useState } from 'react';
-import getMeasurementUnit from '../../../../utils/getMeasurementUnit';
-import m from './LikePanel.module.css'
-import apiRequest from '../../../../api/apiRequest';
+import getMeasurementUnit from '../../../../../utils/getMeasurementUnit';
+import m from './CommentLikePanel.module.css'
 
-function LikePanel(props) {
-    const [reaction, setReaction] = useState(props.reactionId.id_reaction === 1 ? 'like' : props.reactionId.id_reaction === 2 ? 'dislike' : null);
+function CommentLikePanel(props) {
+    const [reaction, setReaction] = useState(null);
     const [likesCount, setLikesCount] = useState(props.likes);
     const [dislikesCount, setDislikesCount] = useState(props.dislikes);
 
-    const onReactionClick = async (newReaction) => {
-        let updatedReaction = null;
-
+    const onReactionClick = (newReaction) => {
         if (reaction === newReaction) {
-            updatedReaction = null;
             setReaction(null);
-            if (newReaction === 'like') {//когда убираешь луйк
-                setLikesCount(prev => prev - 1);
-            }
-            else {//когда убираешь дизлуйк
-                setDislikesCount(prev => prev - 1);
-            }
+            if (newReaction === 'like') setLikesCount(prev => prev - 1);
+            else setDislikesCount(prev => prev - 1);
         } else {
-            updatedReaction = newReaction;
-            setReaction(newReaction);
             if (newReaction === 'like') {
                 setLikesCount(prev => prev + 1);
                 if (reaction === 'dislike') setDislikesCount(prev => prev - 1);
@@ -30,10 +20,7 @@ function LikePanel(props) {
                 setDislikesCount(prev => prev + 1);
                 if (reaction === 'like') setLikesCount(prev => prev - 1);
             }
-        }
-        const response = await apiRequest(`/main/videos/reaction/${props.videoUrl}`, 'PATCH', { reaction: updatedReaction });
-        if (response.status !== 200) {
-            console.error('Вы не можете поставить реакцию: ' + response.message);
+            setReaction(newReaction);
         }
     };
 
@@ -56,12 +43,8 @@ function LikePanel(props) {
                 <img src={dislikeIcon} alt="dislike" className={m.dislike} onClick={() => onReactionClick('dislike')} />
                 <p className={m.statCount}>{getMeasurementUnit(dislikesCount)}</p>
             </div>
-            <div className={m.verticalLine}></div>
-            <div className={m.shareContainer}>
-                <img src='../../../../images/share.png' alt="share" className={m.share} />
-            </div>
         </div >
     );
 }
 
-export default LikePanel;
+export default CommentLikePanel;

@@ -19,10 +19,9 @@ function VideoPage(props) {
     const pathSegments = location.pathname.split('/').filter(Boolean);
     const lastSegment = pathSegments[pathSegments.length - 1];
     const dispatch = useDispatch();
-    const { currentVideo, isLoading, error } = useSelector(state => state.videos);
+    const { currentVideo, reactionForCurrentVideo, isLoading, error } = useSelector(state => state.videos);
     const { allComments } = useSelector(state => state.comments);
-
-    console.log(allComments)
+    const playerRef = useRef(null);
 
     useEffect(() => {
         dispatch(fetchVideoByUrl(lastSegment));
@@ -30,7 +29,7 @@ function VideoPage(props) {
         return () => {
             dispatch(clearCurrentVideo());
         };
-    }, [lastSegment]);
+    }, [lastSegment, dispatch]);
 
     const [menuItems, setMenuItems] = useState([
         { id: 1, text: 'Перейти на канал', picture: '../../../images/mainIcon.png' },
@@ -83,13 +82,16 @@ function VideoPage(props) {
     return (
         <div className={m.container}>
             <div className={m.videoContainer}>
-                <ReactPlayer
-                    url={`${API_URL_FILES}videos/${url}`}
-                    controls
-                    playing={true}
-                    width="100%"
-                    height="100%"
-                />
+                {currentVideo?.url && (
+                    <ReactPlayer
+                        key={currentVideo.url}
+                        ref={playerRef}
+                        url={`${API_URL_FILES}videos/${url}`}
+                        controls
+                        width="100%"
+                        height="100%"
+                    />
+                )}
             </div>
             <div className={m.nameAndStats}>
                 <h2>{name}</h2>
@@ -105,7 +107,7 @@ function VideoPage(props) {
                     <button className={m.myChannelButton}>Подписаться</button>
                 </div>
                 <div className={m.leftSide}>
-                    <LikePanel likes={likes} dislikes={dislikes} hasShare={true} />
+                    <LikePanel likes={likes} dislikes={dislikes} videoUrl={url} reactionId={reactionForCurrentVideo} />
                     <div>
                         <div className={m.options} ref={buttonRef} onClick={() => setIsOpen(!isOpen)}>
                             <img src='../../../../images/playlistsIcon.png' alt="share" className={m.playlists} />
@@ -118,9 +120,9 @@ function VideoPage(props) {
                 </div>
             </div>
             <div className={m.line} />
-            <div className={m.descpiptionContainer}>
+            {description ? <div className={m.descpiptionContainer}>
                 <p className={m.descpiption}>{description}</p>
-            </div>
+            </div> : ''}
             <h2>{setWordEnding(allComments.length, 'комментари', 'й', 'я', 'ев')}</h2>
             <div className={m.leaveComment}>
                 <img src={user.avatar_url ? `${API_URL_FILES}/avatars/${user.avatar_url}` : '../../../images/userDefault.png'} className={m.channelImage}></img>

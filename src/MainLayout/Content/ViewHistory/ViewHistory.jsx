@@ -1,4 +1,4 @@
-import { fetchHistory, clearVideos, removeHistoryVideo } from '../../../store/slices/videosSlice';
+import { fetchHistory, clearVideos, removeHistoryVideo, clearHistoryVideos } from '../../../store/slices/videosSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import WideVideo from '../WideVideo/WideVideo';
@@ -42,9 +42,13 @@ function ViewHistory(props) {
     if (isLoading) return <h1 className={m.loadingData}>Загрузка...</h1>;
     if (error) return <h1>Ошибка: {error}</h1>;
 
+    console.log(watchHistory)
+
     let videosList = watchHistory.map(v => (
-        <WideVideo key={v.id} id={v.id} title={v.name} preview={v.preview_url ? `${API_URL_FILES}previews/${v.preview_url}` : '../../../images/preview.jpg'}
-            channelName={v.owner_username} description={v.description} views={v.views} />
+        <WideVideo key={v.id} id={v.id} title={v.name} description={v.description} channelName={v.owner_username}
+            preview={v.preview_url ? `${API_URL_FILES}previews/${v.preview_url}` : '../../../images/preview.jpg'}
+            channelImage={v.owner_channel_image} url={v.url}
+            views={v.views} loadDate={v.load_date} />
     ));
 
     return (

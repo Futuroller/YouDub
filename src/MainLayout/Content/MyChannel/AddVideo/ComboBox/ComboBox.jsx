@@ -1,7 +1,6 @@
 import m from './ComboBox.module.css';
 
 function ComboBox(props) {
-    // console.log(props.options)
     return (
         <div className={m.container}>
             <p className={m.title}>{props.title}</p>

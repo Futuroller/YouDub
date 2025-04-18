@@ -5,18 +5,26 @@ import passPartOfText from '../../../utils/passPartOfText';
 import getMeasurementUnit from '../../../utils/getMeasurementUnit';
 import m from './Video.module.css'
 import { NavLink, useNavigate } from 'react-router-dom';
+import apiRequest from '../../../api/apiRequest';
+import { useDispatch } from 'react-redux';
+import { clearHistoryVideos, fetchHistory } from '../../../store/slices/videosSlice';
 
 function Video(props) {
-    const navigate = useNavigate();
-
+    const dispatch = useDispatch();
     let description = props.description ? `◆ ${props.description}` : '';
+    const onVideoClick = async () => {
+        const response = await apiRequest(`/main/history/${props.url}`, 'POST');
 
-    const goToVideo = () => {
-        navigate(`/main/video/${props.url}`)
-    };
+        if (response.status !== 200) {
+            return;
+        } else {
+            dispatch(clearHistoryVideos());
+            dispatch(fetchHistory({ page, limit: 10 }));
+        }
+    }
 
     return (
-        <NavLink key={props.id} to={`/main/video/${props.url}`} className={m.container}>
+        <NavLink key={props.id} to={`/main/video/${props.url}`} className={m.container} onClick={onVideoClick}>
             <img src={props.preview} className={m.preview}></img>
             <div className={m.underPreview}>
                 <img src={props.channelImage ? `${API_URL_FILES}avatars/${props.channelImage}` : '../../../../images/userDefault.png'} className={m.channelImage}></img>

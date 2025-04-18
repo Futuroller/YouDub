@@ -10,6 +10,7 @@ function MainPage(props) {
 
     const dispatch = useDispatch();
     const { allVideos, isLoading, error } = useSelector(state => state.videos);
+    const isCollapsed = useSelector(state => state.ui.isNavbarCollapsed);
 
     const [page, setPage] = useState(1);
 
@@ -37,14 +38,14 @@ function MainPage(props) {
     if (error) return <h1>Ошибка: {error}</h1>;
 
     let videosList = allVideos.map(v => (
-        <Video key={v.id} title={v.name} channelName={v.owner_username}
+        <Video key={v.id} title={v.name} description={v.description} channelName={v.owner_username}
             preview={v.preview_url ? `${API_URL_FILES}previews/${v.preview_url}` : '../../../images/preview.jpg'}
             channelImage={v.owner_channel_image} url={v.url}
             views={v.views} loadDate={v.load_date} />
     ));
 
     return (
-        <div className={m.container}>
+        <div className={`${m.container} ${isCollapsed ? m.expanded : m.narrow}`}>
             {videosList}
         </div>
     );

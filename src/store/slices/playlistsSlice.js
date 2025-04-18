@@ -6,10 +6,11 @@ const initialState = {
   otherPlaylists: [],
   watchLaterPlaylist: null,
   likedPlaylist: null,
-  
+  currentPlaylist: [],
   status: {
       isLoading: false,
       error: null,
+      isLimitedAccess: false,
       success: false
   }
 };
@@ -22,12 +23,28 @@ export const fetchAllPlaylists = createAsyncThunk(
     }
 );
 
+export const fetchPlaylistByUrl = createAsyncThunk(
+    'playlists/fetchPlaylistByUrl',
+    async (url, { rejectWithValue }) => {
+        const response = await apiRequest(`/main/playlist/${url}`, 'GET');
+
+        if (response.status == 200) {
+            return response.playlist;
+        } else {
+            return rejectWithValue(response.message);
+        }
+    }
+);
+
 const playlistsSlice = createSlice({
     name: 'playlists',
     initialState,
     reducers: {
         clearPlaylists: (state) => {
             state.allPlaylists = []; // Очищаем массив при смене страницы
+        },
+        clearCurrentPlaylist: (state) => {
+            state.currentPlaylist = [];
         },
     },
     extraReducers: (builder) => {
@@ -46,10 +63,24 @@ const playlistsSlice = createSlice({
         .addCase(fetchAllPlaylists.rejected, (state, action) => {
             state.status.isLoading = false;
             state.status.error = action.payload || 'Ошибка при загрузке плейлистов';
-        });
+        })
+        //по url
+        .addCase(fetchPlaylistByUrl.pending, (state) => {
+            state.status.isLoading = true;
+            state.status.error = null; 
+        })
+        .addCase(fetchPlaylistByUrl.fulfilled, (state, action) => {
+            state.status.isLoading = false;
+            state.status.success = true;
+            state.currentPlaylist = action.payload || [];
+        })
+        .addCase(fetchPlaylistByUrl.rejected, (state, action) => {
+            state.status.isLoading = false;
+            state.status.error = action.payload || 'Ошибка при загрузке плейлиста';
+        })
       }
     });
 
-export const { clearPlaylists } = playlistsSlice.actions;
+export const { clearPlaylists, clearCurrentPlaylist } = playlistsSlice.actions;
 
 export default playlistsSlice.reducer;

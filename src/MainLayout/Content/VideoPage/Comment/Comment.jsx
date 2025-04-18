@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import { API_URL_FILES } from '../../../../config';
 import m from './Comment.module.css'
 import getTimeline from '../../../../utils/getTimeline';
-import LikePanel from '../LikePanel/LikePanel';
+import CommentLikePanel from './CommentLikePanel/CommentLikePanel';
 
 function Comment(props) {
     const user = useSelector((state) => state.user);
@@ -16,7 +16,7 @@ function Comment(props) {
                     <p className={m.timeAgo}>{getTimeline(props.commentDate)}</p>
                 </div>
                 <p className={m.text}>{props.text}</p>
-                <LikePanel likes={props.likes} dislikes={props.dislikes} height='40px' />
+                <CommentLikePanel likes={props.likes} dislikes={props.dislikes} height='40px' />
             </div>
         </div >
     );

@@ -2,8 +2,11 @@ import apiRequest from '../../../api/apiRequest';
 import DropdownMenu from '../../DropdownMenu/DropdownMenu';
 import React, { useState, useRef, useEffect } from "react";
 import { useDispatch } from 'react-redux';
-import { removeHistoryVideo } from '../../../store/slices/videosSlice';
+import { clearHistoryVideos, fetchHistory, removeHistoryVideo } from '../../../store/slices/videosSlice';
 import m from './WideVideo.module.css'
+import { NavLink } from 'react-router-dom';
+import getMeasurementUnit from '../../../utils/getMeasurementUnit';
+import setWordEnding from '../../../utils/setWordEnding';
 
 function WideVideo(props) {
 
@@ -18,6 +21,17 @@ function WideVideo(props) {
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef(null);
     const buttonRef = useRef(null);
+
+    const onVideoClick = async () => {
+        const response = await apiRequest(`/main/history/${props.url}`, 'POST');
+
+        if (response.status !== 200) {
+            return;
+        } else {
+            dispatch(clearHistoryVideos());
+            dispatch(fetchHistory({ page, limit: 10 }));
+        }
+    };
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -34,18 +48,29 @@ function WideVideo(props) {
         };
     }, []);
 
-    const handleDelete = async (videoId) => {
+    const handleDelete = async (e, videoId) => {
         try {
+            e.stopPropagation();
+            e.preventDefault();
             const deletedVideo = await apiRequest(`/main/history/${videoId}`, 'DELETE');
-            console.log(deletedVideo);
             dispatch(removeHistoryVideo(videoId));
         } catch (error) {
             console.error("Ошибка при удалении" + error);
         }
-    }
+    };
+
+    const handleMore = async (e, videoId) => {
+        try {
+            () => setIsOpen(!isOpen)
+            e.stopPropagation();
+            e.preventDefault();
+        } catch (error) {
+            console.error("Ошибка" + error);
+        }
+    };
 
     return (
-        <div className={m.container}>
+        <NavLink to={`/main/video/${props.url}`} className={m.container} onClick={onVideoClick}>
             <img src={props.preview} className={m.preview}></img>
 
             <div className={m.videoInfo}>
@@ -53,23 +78,23 @@ function WideVideo(props) {
                     <p className={m.title}>{props.title}</p>
                     <div className={m.nameViews}>
                         <p>{props.channelName}</p>
-                        <p>{props.views}</p>
+                        <p>{setWordEnding(getMeasurementUnit(props.views), 'просмотр', '', 'а', 'ов')}</p>
                     </div>
                 </div>
                 <p className={m.description}>{props.description}</p>
             </div>
             <div className={m.buttons}>
-                <button className={m.deleteButton} onClick={() => handleDelete(props.id)}></button>
+                <button className={m.deleteButton} onClick={(e) => handleDelete(e, props.id)}></button>
                 <button
                     ref={buttonRef}
                     className={m.moreButton}
-                    onClick={() => setIsOpen(!isOpen)}
+                    onClick={(e) => handleMore(e, props.id)}
                 />
             </div>
             <div className={m.menuContainer} ref={menuRef}>
                 {isOpen && <DropdownMenu menuItems={menuItems} top="50px" left="-250px" />}
             </div>
-        </div>
+        </NavLink>
     );
 }
 

@@ -3,10 +3,8 @@
     width: 100%;
     display: flex;
     background-color: #000000;
-    justify-content: center;
     align-items: flex-start;
     flex-wrap: wrap;
-    /* border: 1px solid #FF0149; */
     overflow: auto;
     scrollbar-color: hsl(0, 0%, 5%);
 }

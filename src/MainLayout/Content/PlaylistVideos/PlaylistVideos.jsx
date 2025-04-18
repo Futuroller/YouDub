@@ -5,6 +5,7 @@ import Video from '../Video/Video';
 import m from './PlaylistVideos.module.css'
 import { fetchVideosFromPlaylist, clearPlaylist } from '../../../store/slices/videosSlice';
 import { API_URL_FILES } from '../../../config';
+import { clearCurrentPlaylist, fetchPlaylistByUrl } from '../../../store/slices/playlistsSlice';
 
 function PlaylistVideos(props) {
 
@@ -16,11 +17,15 @@ function PlaylistVideos(props) {
     const { playlists, isLoading, error } = useSelector(state => state.videos);
     const [page, setPage] = useState(1);
 
+    const { currentPlaylist, status } = useSelector(state => state.playlists);
+
     useEffect(() => {
         dispatch(fetchVideosFromPlaylist(lastSegment, { page, limit: 10 }));
+        dispatch(fetchPlaylistByUrl(lastSegment));
 
         return () => {
             dispatch(clearPlaylist());
+            dispatch(clearCurrentPlaylist());
         };
     }, [page, lastSegment]);
 
@@ -42,9 +47,10 @@ function PlaylistVideos(props) {
 
     if (isLoading) return <h1 className={m.loadingData}>Загрузка...</h1>;
     if (error) return <h1>Ошибка: {error}</h1>;
+    if (status.error) return <h2>{status.error}</h2>;
 
     let videosList = playlists.map(v => (
-        <Video key={v.id} title={v.name} channelName={v.owner_username}
+        <Video key={v.id} title={v.name} description={v.description} channelName={v.owner_username}
             preview={v.preview_url ? `${API_URL_FILES}previews/${v.preview_url}` : '../../../images/preview.jpg'}
             channelImage={v.owner_channel_image} url={v.url}
             views={v.views} loadDate={v.load_date} />)
@@ -52,9 +58,9 @@ function PlaylistVideos(props) {
 
     return (
         <div className={m.container}>
-            <p className={m.title}>Понравившиеся</p>
+            <p className={m.title}>{currentPlaylist.name ? currentPlaylist.name : 'Видео с каналов, на которые вы подписаны'}</p>
             <div className={m.videosContainer}>
-                {videosList}
+                {videosList.length > 0 ? videosList : <p className={m.caption}>Пока видеороликов нет</p>}
             </div>
         </div>
     );
