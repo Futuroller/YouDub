@@ -12,9 +12,9 @@ import getTimeline from '../../../utils/getTimeline';
 import m from './VideoPage.module.css'
 import { fetchComments } from '../../../store/slices/commentsSlice';
 import LikePanel from './LikePanel/LikePanel';
+import LeaveComment from './LeaveComment/LeaveComment';
 
 function VideoPage(props) {
-    const user = useSelector((state) => state.user);
     const location = useLocation();
     const pathSegments = location.pathname.split('/').filter(Boolean);
     const lastSegment = pathSegments[pathSegments.length - 1];
@@ -56,13 +56,6 @@ function VideoPage(props) {
         };
     }, []);
 
-    const [comment, setComment] = useState('');
-
-    const onDescriptionChange = (e) => {
-        const text = e.target.value;
-        setComment(text);
-    };
-
     if (!currentVideo.users) return <h1 className={m.loadingData}>Загрузка...</h1>;
     if (error) return <h1>Ошибка: {error}</h1>;
 
@@ -73,11 +66,14 @@ function VideoPage(props) {
     let commentsList;
     if (allComments) {
         commentsList = allComments.map(c => (
-            <Comment key={c.id} text={c.comment_text} likes={c.likes} dislikes={c.dislikes}
-                commentDate={c.comment_date} ownerName={c.users.username}
-                avatar={c.users.avatar_url} />
+            <Comment key={c.id} id={c.id} text={c.comment_text} likes={c.likes} dislikes={c.dislikes}
+                commentDate={c.comment_date} ownerName={c.user.username}
+                avatar={c.user.avatar_url} currentReaction={c.currentUserReaction} videoOwnerId={currentVideo.id_owner}/>
         ));
     }
+
+    console.log(allComments);
+    console.log(currentVideo);
 
     return (
         <div className={m.container}>
@@ -124,10 +120,7 @@ function VideoPage(props) {
                 <p className={m.descpiption}>{description}</p>
             </div> : ''}
             <h2>{setWordEnding(allComments.length, 'комментари', 'й', 'я', 'ев')}</h2>
-            <div className={m.leaveComment}>
-                <img src={user.avatar_url ? `${API_URL_FILES}/avatars/${user.avatar_url}` : '../../../images/userDefault.png'} className={m.channelImage}></img>
-                <textarea className={m.commentField} value={comment} onChange={onDescriptionChange}></textarea>
-            </div>
+            <LeaveComment url={lastSegment}/>
             <div className={m.commentsContainer}>
                 {commentsList}
             </div>

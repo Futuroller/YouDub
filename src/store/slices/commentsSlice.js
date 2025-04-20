@@ -33,7 +33,7 @@ const commentsSlice = createSlice({
             const comments = action.payload;
 
             if (!action.payload) return;
-            state.allComments = comments;
+            state.allComments = comments.sort((a, b) => new Date(b.comment_date) - new Date(a.comment_date));
           })
           .addCase(fetchComments.rejected, (state, action) => {
             state.isLoading = false;

@@ -8,9 +8,12 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import apiRequest from '../../../api/apiRequest';
 import { useDispatch } from 'react-redux';
 import { clearHistoryVideos, fetchHistory } from '../../../store/slices/videosSlice';
+import { useState } from 'react';
 
 function Video(props) {
     const dispatch = useDispatch();
+    const [page, setPage] = useState(1);
+    
     let description = props.description ? `◆ ${props.description}` : '';
     const onVideoClick = async () => {
         const response = await apiRequest(`/main/history/${props.url}`, 'POST');
@@ -21,7 +24,7 @@ function Video(props) {
             dispatch(clearHistoryVideos());
             dispatch(fetchHistory({ page, limit: 10 }));
         }
-    }
+    };
 
     return (
         <NavLink key={props.id} to={`/main/video/${props.url}`} className={m.container} onClick={onVideoClick}>

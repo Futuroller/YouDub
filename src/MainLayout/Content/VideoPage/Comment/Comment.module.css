@@ -22,8 +22,13 @@
 .topSide {
     display: flex;
     align-items: flex-end;
-    justify-content: flex-start;
+    justify-content: space-between;
     margin-bottom: 5px;
+}
+
+.subContainer {
+    display: flex;
+    align-items: center;
 }
 
 .channelName {
@@ -38,6 +43,14 @@
     text-wrap: nowrap;
     margin-left: 30px;
     margin-bottom: 5px;
+}
+
+.deleteButton {
+    background-color: #ffffff00;
+    background-image: url('../../images/cross.png');
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .text {
