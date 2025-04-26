@@ -1,40 +1,57 @@
 import { fetchVideos, clearVideos } from '../../../store/slices/videosSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Video from '../Video/Video';
 import m from './MainPage.module.css'
 import { API_URL_FILES } from '../../../config';
-import { NavLink } from 'react-router-dom';
 
-function MainPage(props) {
-
+function MainPage({ contentRef }) {
     const dispatch = useDispatch();
     const { allVideos, isLoading, error } = useSelector(state => state.videos);
     const isCollapsed = useSelector(state => state.ui.isNavbarCollapsed);
-
+    const [isFetchingMore, setIsFetchingMore] = useState(false);
+    const [hasMore, setHasMore] = useState(true);
     const [page, setPage] = useState(1);
 
     useEffect(() => {
-        dispatch(fetchVideos({ page, limit: 10 }));
-    }, [page]);
+        dispatch(fetchVideos({ page, limit: 12 }));
+    }, []);
 
-    const handleScroll = (e) => {
-        const { scrollTop, clientHeight, scrollHeight } = e.target.documentElement;
+    const loadMore = async () => {
+        if (isFetchingMore || isLoading) return;
+        setIsFetchingMore(true);
 
-        if (scrollTop + clientHeight >= scrollHeight - 50 && !isLoading) {
+        const action = await dispatch(fetchVideos({ page, limit: 12 }));
+        const newVideos = action.payload;
+
+        if (!newVideos || newVideos.length === 0) {
+            setHasMore(false);
+        } else {
             setPage(prev => prev + 1);
+        }
+
+        setIsFetchingMore(false);
+    };
+
+    const handleScroll = () => {
+        const element = contentRef.current;
+        if (!element || isFetchingMore || isLoading) return;
+
+        const { scrollTop, clientHeight, scrollHeight } = element;
+
+        if (scrollTop + clientHeight >= scrollHeight - 100) {
+            loadMore();
         }
     };
 
     useEffect(() => {
-        window.addEventListener('scroll', handleScroll);
+        const current = contentRef.current;
+        if (!current) return;
 
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, []);
+        current.addEventListener('scroll', handleScroll);
+        return () => current.removeEventListener('scroll', handleScroll);
+    }, [isFetchingMore, isLoading]);
 
-    if (isLoading) return <h1 className={m.loadingData}>Загрузка...</h1>;
     if (error) return <h1>Ошибка: {error}</h1>;
 
     let videosList = allVideos.map(v => (
@@ -46,7 +63,13 @@ function MainPage(props) {
 
     return (
         <div className={`${m.container} ${isCollapsed ? m.expanded : m.narrow}`}>
-            {videosList}
+            <div className={m.videos}>
+                {videosList}
+            </div>
+            <div className={m.botomCaption}>
+                {isFetchingMore && hasMore && <p className={m.loadingData}>Загрузка...</p>}
+                {!hasMore && <p className={m.noMore}>Загрузите свои видео, чтобы их стало больше!</p>}
+            </div>
         </div>
     );
 }

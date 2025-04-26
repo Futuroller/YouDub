@@ -1,13 +1,23 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AuthField from '../AuthField/AuthField';
 import { NavLink } from 'react-router-dom';
 import apiRequest from '../../api/apiRequest';
 import { useNavigate } from 'react-router-dom';
 import m from './LoginPage.module.css'
+import { setUser } from '../../store/slices/userSlice';
+import { useDispatch } from 'react-redux';
 
 function LoginPage(props) {
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const token = localStorage.getItem('token');
+    useEffect(() => {
+        if (token) {
+            navigate('/main/mainpage');
+        }
+    }, [token]);
+
 
     const [authFieldsData, setAuthFieldsData] = useState([
         { id: 1, type: 'email', fieldTitle: 'Email', placeholder: 'address@mail.ru', value: '' },
@@ -32,6 +42,7 @@ function LoginPage(props) {
             email: authFieldsData[0].value,
             password: authFieldsData[1].value,
         };
+        dispatch(setUser(null));
 
         try {
             const response = await apiRequest('/auth/login', 'POST', data);

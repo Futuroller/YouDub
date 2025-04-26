@@ -3,7 +3,7 @@ import apiRequest from '../../api/apiRequest';
 
 const initialState ={
     allVideos: [],         // Все видео с бэка (для ленивой загрузки)
-    myVideos: [],         // Видео, где id_owner === userId
+    channelVideos: [],         // Видео, где id_owner === userId
     watchHistory: [],     // История просмотров
     subscriptions: [],    // Видео с каналов, на которые подписан
     playlists: [],        // Плейлисты
@@ -30,12 +30,20 @@ export const fetchVideoByUrl = createAsyncThunk(
   }
 );
 
-export const fetchMyVideos = createAsyncThunk(
-    'videos/fetchMyVideos',
-    async ({ page, limit }) => {
-      const response = await apiRequest('/main/videos/my-channel', 'POST', { page, limit });
+export const fetchVideosFromChannel = createAsyncThunk(
+    'videos/fetchVideosFromChannel',
+    async (tagname, { page, limit }) => {
+      const response = await apiRequest(`/main/videos/channel/${tagname}`, 'POST', { page, limit });
       return response.myVideos;
   }
+);
+
+export const fetchVideosFromSubChannels = createAsyncThunk(
+  'videos/fetchVideosFromSubChannels',
+  async ({ page, limit }) => {
+    const response = await apiRequest(`/main/videos/channels`, 'POST', { page, limit });
+    return response.videos;
+}
 );
 
 export const fetchHistory = createAsyncThunk(
@@ -70,9 +78,15 @@ const videosSlice = createSlice({
         clearPlaylist: (state) => {
           state.playlists = [];
         },
+        clearChannelVideos: (state) => {
+          state.channelVideos = [];
+        },
         clearCurrentVideo: (state) => {
           state.currentVideo = {};
-        }
+        },
+        clearVideosFromSubChannel: (state) => {
+          state.subscriptions = [];
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -95,19 +109,19 @@ const videosSlice = createSlice({
           })
     
           // ✅ Мои видео
-          .addCase(fetchMyVideos.pending, (state) => {
+          .addCase(fetchVideosFromChannel.pending, (state) => {
             state.isLoading = true;
           })
-          .addCase(fetchMyVideos.fulfilled, (state, action) => {
+          .addCase(fetchVideosFromChannel.fulfilled, (state, action) => {
             state.isLoading = false;
             const newVideos = action.payload;
             // Фильтруем новые видео, чтобы не добавлять уже существующие
             const uniqueVideos = newVideos.filter(video => 
-                !state.myVideos.some(existingVideo => existingVideo.id === video.id)
+                !state.channelVideos.some(existingVideo => existingVideo.id === video.id)
             );
-            state.myVideos = [...state.myVideos, ...uniqueVideos]; // Лениво загружаем видео
+            state.channelVideos = [...state.channelVideos, ...uniqueVideos]; // Лениво загружаем видео
           })
-          .addCase(fetchMyVideos.rejected, (state, action) => {
+          .addCase(fetchVideosFromChannel.rejected, (state, action) => {
             state.isLoading = false;
             state.error = action.error.message;
           })
@@ -167,10 +181,28 @@ const videosSlice = createSlice({
             state.isLoading = false;
             state.error = action.error.message;
           })
+
+          .addCase(fetchVideosFromSubChannels.pending, (state) => {
+            state.isLoading = true;
+          })
+          .addCase(fetchVideosFromSubChannels.fulfilled, (state, action) => {
+            state.isLoading = false;
+            const newVideos = action.payload;
+            const uniqueVideos = newVideos.filter(video => 
+                !state.subscriptions.some(existingVideo => existingVideo.id === video.id)
+            );
+            
+            const combined = [...state.subscriptions, ...uniqueVideos]; // Лениво загружаем видео
+            state.subscriptions = combined.sort((a, b) => new Date(b.load_date) - new Date(a.load_date));
+          })
+          .addCase(fetchVideosFromSubChannels.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = action.error.message;
+          })
       }
     });
 
-export const { clearVideos, clearPlaylist, clearHistoryVideos, removeHistoryVideo, clearCurrentVideo } = videosSlice.actions;
+export const { clearVideos, clearPlaylist, clearHistoryVideos, removeHistoryVideo, clearChannelVideos, clearCurrentVideo, clearVideosFromSubChannel } = videosSlice.actions;
 
 export default videosSlice.reducer;
     

@@ -17,6 +17,7 @@
     flex-wrap: wrap;
     width: 100%;
     justify-content: flex-start;
+    margin-bottom: 5%;
 }
 
 .caption {

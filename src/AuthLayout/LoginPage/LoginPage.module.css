@@ -58,6 +58,7 @@
     border-radius: 20px;
     width: 200px;
     color: black;
+    cursor: pointer;
 }
 
 .toLogin {

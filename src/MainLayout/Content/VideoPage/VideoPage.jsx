@@ -13,6 +13,9 @@ import m from './VideoPage.module.css'
 import { fetchComments } from '../../../store/slices/commentsSlice';
 import LikePanel from './LikePanel/LikePanel';
 import LeaveComment from './LeaveComment/LeaveComment';
+import { fetchAllPlaylists } from '../../../store/slices/playlistsSlice';
+import apiRequest from '../../../api/apiRequest';
+import SubButton from './ChannelInfo/SubButton/SubButton';
 
 function VideoPage(props) {
     const location = useLocation();
@@ -20,22 +23,40 @@ function VideoPage(props) {
     const lastSegment = pathSegments[pathSegments.length - 1];
     const dispatch = useDispatch();
     const { currentVideo, reactionForCurrentVideo, isLoading, error } = useSelector(state => state.videos);
+    const user = useSelector(state => state.user);
+    const { allPlaylists } = useSelector(state => state.playlists);
     const { allComments } = useSelector(state => state.comments);
     const playerRef = useRef(null);
 
     useEffect(() => {
         dispatch(fetchVideoByUrl(lastSegment));
         dispatch(fetchComments(lastSegment));
+        dispatch(fetchAllPlaylists())
         return () => {
             dispatch(clearCurrentVideo());
         };
     }, [lastSegment, dispatch]);
 
-    const [menuItems, setMenuItems] = useState([
-        { id: 1, text: 'Перейти на канал', picture: '../../../images/mainIcon.png' },
-        { id: 2, text: 'Настройки', picture: '../../../images/followChannelsIcon.png' },
-        { id: 3, text: 'Выйти из аккаунта', picture: '../../../images/followChannelsIcon.png' }
-    ]);
+    const onPlaylistClick = async (url) => {
+        try {
+            const response = await apiRequest(`/main/playlists/video/${url}`, 'PATCH', { videoId: currentVideo.id });
+            if (response.status === 200) {
+                alert('Видео добавлено в плейлист');
+            } else {
+                console.log(response);
+            }
+        } catch (error) {
+            console.error('Ошибка добавления в плейлист: ' + error);
+            alert('Ошибка добавления в плейлист');
+        }
+    };
+
+    const menuItems = allPlaylists.map(p => ({
+        id: p.id,
+        text: p.name,
+        onClickHandler: () => onPlaylistClick(p.url),
+        picture: '../../../../../images/plus.png'
+    }));
 
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef(null);
@@ -60,20 +81,19 @@ function VideoPage(props) {
     if (error) return <h1>Ошибка: {error}</h1>;
 
     const { name, description, url, load_date,
-        views, likes, dislikes, ownerSubscribersCount } = currentVideo;
-    const { username, avatar_url } = currentVideo.users;
+        views, likes, dislikes, ownerSubscribersCount, id_owner } = currentVideo;
+    const { username, avatar_url, tagname } = currentVideo.users;
 
     let commentsList;
     if (allComments) {
         commentsList = allComments.map(c => (
             <Comment key={c.id} id={c.id} text={c.comment_text} likes={c.likes} dislikes={c.dislikes}
                 commentDate={c.comment_date} ownerName={c.user.username}
-                avatar={c.user.avatar_url} currentReaction={c.currentUserReaction} videoOwnerId={currentVideo.id_owner}/>
+                avatar={c.user.avatar_url} currentReaction={c.currentUserReaction} videoOwnerId={id_owner} commentOwnerId={c.user.id} />
         ));
     }
 
-    console.log(allComments);
-    console.log(currentVideo);
+    console.log(currentVideo)
 
     return (
         <div className={m.container}>
@@ -98,16 +118,16 @@ function VideoPage(props) {
             </div>
             <div className={m.interactiveBlock}>
                 <div className={m.leftSide}>
-                    <ChannelInfo username={username}
+                    <ChannelInfo username={username} tagname={tagname}
                         subscribers={ownerSubscribersCount} avatar={avatar_url} />
-                    <button className={m.myChannelButton}>Подписаться</button>
+                    {id_owner !== user.id ? <SubButton channelTagname={tagname} isUserFollowed={currentVideo.isFollowed} /> : ''}
                 </div>
-                <div className={m.leftSide}>
+                <div className={m.rightSide}>
                     <LikePanel likes={likes} dislikes={dislikes} videoUrl={url} reactionId={reactionForCurrentVideo} />
                     <div>
-                        <div className={m.options} ref={buttonRef} onClick={() => setIsOpen(!isOpen)}>
-                            <img src='../../../../images/playlistsIcon.png' alt="share" className={m.playlists} />
-                            <img src='../../../../images/plus.png' alt="share" className={m.plus} />
+                        <div className={m.options} ref={buttonRef} onClick={() => setIsOpen(!isOpen)} title='Добавить в плейлист'>
+                            <img src='../../../../images/playlistsIcon.png' alt="playlists" className={m.playlists} />
+                            <img src='../../../../images/plus.png' className={m.plus} />
                         </div>
                         <div className={m.menuContainer} ref={menuRef}>
                             {isOpen && <DropdownMenu menuItems={menuItems} top={'10px'} left={'-150px'} />}
@@ -120,7 +140,7 @@ function VideoPage(props) {
                 <p className={m.descpiption}>{description}</p>
             </div> : ''}
             <h2>{setWordEnding(allComments.length, 'комментари', 'й', 'я', 'ев')}</h2>
-            <LeaveComment url={lastSegment}/>
+            <LeaveComment url={lastSegment} />
             <div className={m.commentsContainer}>
                 {commentsList}
             </div>

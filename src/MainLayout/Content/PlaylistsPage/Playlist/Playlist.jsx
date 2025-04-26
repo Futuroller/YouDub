@@ -1,3 +1,4 @@
+import { NavLink } from 'react-router-dom';
 import m from './Playlist.module.css'
 
 function Playlist(props) {
@@ -7,8 +8,10 @@ function Playlist(props) {
     }
 
     return (
-        <div className={m.container}>
-            <img src={props.preview} className={m.preview}></img>
+        <NavLink to={`/main/playlists/${props.url}`} className={m.container}>
+            <div className={m.previewContainer}>
+                <img src={props.preview} className={m.preview}></img>
+            </div>
             <div className={m.underPreview}>
                 <div className={m.videoDescription}>
                     <div className={m.topBlock}>
@@ -20,7 +23,7 @@ function Playlist(props) {
                     </div>
                 </div>
             </div>
-        </div>
+        </NavLink>
     );
 }
 

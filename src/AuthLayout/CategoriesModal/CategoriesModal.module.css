@@ -1,0 +1,70 @@
+.container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: #161616;
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 500px;
+    width: 90%;
+}
+
+.categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.category {
+    padding: 8px 16px;
+    border: 1px solid #FF0149;
+    border-radius: 20px;
+    background: #2b2b2b;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.category:hover {
+    background: #FF0149;
+}
+
+.selected {
+    background: #FF0149;
+    color: white;
+    border-color: #d3d3d3;
+}
+
+.buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.cancel,
+.confirm {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.cancel {
+    background: white;
+    color: black;
+}
+
+.confirm {
+    background: #FF0149;
+    color: white;
+}

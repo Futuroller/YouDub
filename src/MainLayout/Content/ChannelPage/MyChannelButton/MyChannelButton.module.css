@@ -2,7 +2,7 @@
     background-color: #1d1d1d;
     color: white;
     font-size: smaller;
-    min-width: 200px;
+    min-width: fit-content;
     height: 40px;
     display: flex;
     justify-content: center;
@@ -10,7 +10,8 @@
     margin-right: 3%;
     font-size: 17px;
     border-radius: 15px;
-    padding: 0%;
+    padding-left: 2%;
+    padding-right: 2%;
 }
 
 .icon {

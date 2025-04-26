@@ -42,8 +42,6 @@ function ViewHistory(props) {
     if (isLoading) return <h1 className={m.loadingData}>Загрузка...</h1>;
     if (error) return <h1>Ошибка: {error}</h1>;
 
-    console.log(watchHistory)
-
     let videosList = watchHistory.map(v => (
         <WideVideo key={v.id} id={v.id} title={v.name} description={v.description} channelName={v.owner_username}
             preview={v.preview_url ? `${API_URL_FILES}previews/${v.preview_url}` : '../../../images/preview.jpg'}

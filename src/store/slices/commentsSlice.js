@@ -22,6 +22,9 @@ const commentsSlice = createSlice({
         clearComments: (state) => {
           state.allComments = [];
         },
+        removeComment: (state, action) => {
+          state.allComments = state.allComments.filter(comment => comment.id !== action.payload);
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -42,7 +45,7 @@ const commentsSlice = createSlice({
         }
     });
 
-export const { clearComments } = commentsSlice.actions;
+export const { clearComments, removeComment } = commentsSlice.actions;
 
 export default commentsSlice.reducer;
     

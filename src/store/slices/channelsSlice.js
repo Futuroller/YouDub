@@ -4,12 +4,18 @@ import apiRequest from '../../api/apiRequest';
 const initialState = {
   allChannels: [],
   subscribedChannels: [],
+  currentChannel: {},
   
-  status: {
+  subChannelsStatus: {
       isLoading: false,
       error: null,
       success: false
-  }
+  },
+  currentChannelStatus: {
+    isLoading: false,
+    error: null,
+    success: false
+}
 };
 
 export const fetchSubscribedChannels = createAsyncThunk(
@@ -20,35 +26,59 @@ export const fetchSubscribedChannels = createAsyncThunk(
     }
 );
 
+export const fetchChannelByTagname = createAsyncThunk(
+    'channels/fetchChannelByTagname',
+    async (tagname) => {
+        const response = await apiRequest(`/main/channels/${tagname}`, 'GET');
+        return response.channel;
+    }
+);
+
 const channelsSlice = createSlice({
     name: 'channels',
     initialState,
     reducers: {
         clearChannels: (state) => {
-            state.allChannels = []; // Очищаем массив при смене страницы
+            state.allChannels = [];
+        },
+        clearCurrentChannel: (state) => {
+            state.currentChannel = {};
         }
     },
     extraReducers: (builder) => {
       builder
         .addCase(fetchSubscribedChannels.pending, (state) => {
-            state.status.isLoading = true;
-            state.status.error = null; 
+            state.subChannelsStatus.isLoading = true;
+            state.subChannelsStatus.error = null; 
         })
         .addCase(fetchSubscribedChannels.fulfilled, (state, action) => {
-            state.status.isLoading = false;
-            state.status.success = true;
-            const uniqueChannels = action.payload.filter(playlist =>
-                !state.subscribedChannels.some(existing => existing.id === playlist.id)
-            );
-            state.subscribedChannels = [...state.subscribedChannels, ...uniqueChannels];
+            state.subChannelsStatus.isLoading = false;
+            state.subChannelsStatus.success = true;
+            const channels = action.payload;
+            state.subscribedChannels = channels.sort((a, b) => new Date(b.subscribed_at) - new Date(a.subscribed_at));
         })
         .addCase(fetchSubscribedChannels.rejected, (state, action) => {
-            state.status.isLoading = false;
-            state.status.error = action.payload || 'Ошибка при загрузке каналов';
+            state.subChannelsStatus.isLoading = false;
+            state.subChannelsStatus.error = action.payload || 'Ошибка при загрузке каналов';
+        })
+
+        .addCase(fetchChannelByTagname.pending, (state) => {
+            state.currentChannelStatus.isLoading = true;
+            state.currentChannelStatus.error = null; 
+        })
+        .addCase(fetchChannelByTagname.fulfilled, (state, action) => {
+            state.currentChannelStatus.isLoading = false;
+            state.currentChannelStatus.success = true;
+            const channel = action.payload;
+            state.currentChannel = {...channel};
+        })
+        .addCase(fetchChannelByTagname.rejected, (state, action) => {
+            state.currentChannelStatus.isLoading = false;
+            state.currentChannelStatus.error = action.payload || 'Ошибка при загрузке канала';
         });
       }
     });
 
-export const { clearChannels } = channelsSlice.actions;
+export const { clearChannels, clearCurrentChannel } = channelsSlice.actions;
 
 export default channelsSlice.reducer;

@@ -4,11 +4,14 @@ import AuthField from '../AuthField/AuthField';
 import apiRequest from '../../api/apiRequest';
 import { useNavigate } from 'react-router-dom';
 import m from './SignUpPage.module.css';
+import CategoriesModal from '../CategoriesModal/CategoriesModal';
 
 function SignUpPage(props) {
 
     const navigate = useNavigate();
     const [isInProcess, setIsInProcess] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [selectedCategories, setSelectedCategories] = useState([]);
 
     const [authFieldsData, setAuthFieldsData] = useState([
         { id: 1, type: 'text', fieldTitle: 'Имя пользователя', placeholder: 'dubinsky', value: '' },
@@ -28,21 +31,25 @@ function SignUpPage(props) {
             placeholder={a.placeholder} onChange={(value) => textChange(a.id, value)} required />
     ));
 
+    const onCategoriesClick = () => {
+        setShowModal(true);
+    };
+
     const signUp = async (event) => {
         event.preventDefault();
-        if (!isInProcess) {
-            setIsInProcess(true);
-            const data = {
-                username: authFieldsData[0].value,
-                email: authFieldsData[1].value,
-                password: authFieldsData[2].value,
-            };
+        const data = {
+            username: authFieldsData[0].value,
+            email: authFieldsData[1].value,
+            password: authFieldsData[2].value,
+            categories: selectedCategories,
+        };
 
-            const passwordRepeat = authFieldsData[3].value;
+        const passwordRepeat = authFieldsData[3].value;
 
-            if (data.username.length >= 3) {
-                if (data.password.length >= 8) {
-                    if (data.password === passwordRepeat) {
+        if (data.username.length >= 3) {
+            if (data.password.length >= 8) {
+                if (data.password === passwordRepeat) {
+                    if (data.categories.length !== 0) {
                         try {
                             const response = await apiRequest('/auth/signup', 'POST', data);
 
@@ -58,19 +65,21 @@ function SignUpPage(props) {
                         } finally {
                             setIsInProcess(false);
                         }
-
                     } else {
-                        alert("Пароли не совпадают");
+                        alert("Выберите любимые категории");
                         return;
                     }
                 } else {
-                    alert("Длина пароля должна быть не менее 8-ми символов");
+                    alert("Пароли не совпадают");
                     return;
                 }
             } else {
-                alert("Длина логина должна быть не менее 3-х символов");
+                alert("Длина пароля должна быть не менее 8-ми символов");
                 return;
             }
+        } else {
+            alert("Длина логина должна быть не менее 3-х символов");
+            return;
         }
     };
 
@@ -84,9 +93,16 @@ function SignUpPage(props) {
                 <div className={m.fieldsContainer}>
                     {authFields}
                 </div>
+                <div className={m.categories} onClick={onCategoriesClick}>
+                    <img src='../../../images/categories.png'></img>
+                    <p>Выбери любимые категории</p>
+                </div>
                 <input type='submit' value='Создать аккаунт' className={m.signIn} />
                 <NavLink to='/auth/login'><p className={m.toLogin}>Уже есть аккаунт? Войти...</p></NavLink>
             </form>
+            {showModal && (
+                <CategoriesModal onClose={() => setShowModal(false)} onSelect={(categories) => setSelectedCategories(categories)} />
+            )}
         </div>
     );
 }

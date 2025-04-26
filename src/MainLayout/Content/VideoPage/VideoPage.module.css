@@ -8,7 +8,7 @@
 }
 
 .videoContainer {
-    height: 630px;
+    height: 640px;
     border-bottom: 2px solid #FF0149;
 }
 
@@ -17,6 +17,14 @@
     justify-content: space-between;
     width: 95%;
     font-size: 22px;
+    min-height: 80px;
+    flex-wrap: wrap;
+}
+
+.nameAndStats * {
+    margin: 0%;
+    display: flex;
+    align-items: center;
 }
 
 .stats {
@@ -34,29 +42,19 @@
 .interactiveBlock {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
 }
 
 .leftSide {
     display: flex;
     align-items: center;
-    width: 500px;
 }
 
-.myChannelButton {
-    background-color: #313131;
-    color: white;
-    font-size: smaller;
-    width: 170px;
-    height: 40px;
+.rightSide {
     display: flex;
-    justify-content: center;
     align-items: center;
-    margin-left: 3%;
-    font-size: 17px;
-    border-radius: 15px;
-    border: 1px solid #FF0149;
+    margin-right: 5%;
 }
-
 
 .options {
     display: flex;
@@ -64,7 +62,7 @@
     align-items: center;
     width: 80px;
     height: 50px;
-    background-color: #313131;
+    background-color: #1a1a1a;
     border-radius: 30px;
     border: 1px solid #FF0149;
     padding-left: 10px;

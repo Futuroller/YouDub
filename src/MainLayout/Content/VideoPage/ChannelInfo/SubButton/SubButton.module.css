@@ -1,0 +1,19 @@
+.subButton {
+    background-color: #1a1a1a;
+    color: white;
+    font-size: smaller;
+    max-width: fit-content;
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 3%;
+    font-size: 15px;
+    border-radius: 15px;
+    border: 1px solid #FF0149;
+}
+
+.subButton img {
+    height: 25px;
+    margin-right: 10px;
+}

@@ -9,16 +9,15 @@ import apiRequest from '../api/apiRequest';
 import { useEffect, useState } from 'react'
 
 function MainLayout() {
-
     const user = useSelector(state => state.user);
-
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [isFetched, setIsFetched] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [token, setToken] = useState(localStorage.getItem('token'));
+
 
     useEffect(() => {
-        const token = localStorage.getItem('token'); // Получаем токен из localStorage
         if (!token) {
             console.log('Токен отсутствует. Пользователь не авторизован.');
             navigate('/auth/login');
@@ -50,8 +49,7 @@ function MainLayout() {
         };
 
         getUserData();
-    }, [dispatch, navigate, user, isFetched, isLoading]);
-
+    }, [dispatch, navigate, user, isFetched, isLoading, token]);
 
     return (
         <div className={m.app}>

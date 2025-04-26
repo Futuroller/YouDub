@@ -1,6 +1,11 @@
 .container {
     display: flex;
     height: 80px;
+    color: white;
+}
+
+.container:hover {
+    color: white;
 }
 
 .channelImage {
@@ -25,4 +30,5 @@
 .subs {
     color: #CBCBCB;
     margin: 0px;
+    text-wrap: nowrap;
 }

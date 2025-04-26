@@ -30,9 +30,10 @@ function PlaylistsPage() {
                         key={p.id}
                         title={p.name}
                         channelName={p.channelName}
-                        preview={p.preview}
+                        preview={p.name == 'Понравившиеся' ? '../../../../images/like.png' : p.name == 'Смотреть позже' ? '../../../../images/watchLaterIcon.png' : '../../../../images/playlistIcon.png'}
                         channelImage={p.channelImage}
                         access_status={p.access_status}
+                        url={p.url}
                         videosCount={p.videosCount}
                     />
                 ))}

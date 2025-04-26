@@ -47,3 +47,9 @@
     height: 100px;
     width: 75%;
 }
+
+.caption {
+    font-size: 18px;
+    color: white;
+    margin-left: 20px;
+}

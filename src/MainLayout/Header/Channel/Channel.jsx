@@ -1,16 +1,18 @@
 import { useState, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import DropdownMenu from '../../DropdownMenu/DropdownMenu';
 import m from './Channel.module.css'
 import { useNavigate } from 'react-router-dom';
 import { API_URL_FILES } from '../../../config';
+import { setUser } from '../../../store/slices/userSlice';
 
 function Channel() {
     const user = useSelector((state) => state.user);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const goMyChannelHandler = () => {
-        navigate('/main/my-channel');
+        navigate(`/main/channel/${user.tagname}`);
     };
 
     const goSettingsHandler = () => {
@@ -20,8 +22,9 @@ function Channel() {
     const leaveAccHandler = () => {
         const answer = confirm('Вы уверены что хотите выйти из аккаунта?');
         if (answer) {
-            navigate('/auth/login');
+            dispatch(setUser(null));
             localStorage.removeItem('token');
+            location.href = '/auth/login';
         }
     };
 
@@ -30,6 +33,21 @@ function Channel() {
         { id: 2, text: 'Настройки', picture: '../../../images/settings.png', onClickHandler: goSettingsHandler },
         { id: 3, text: 'Выйти из аккаунта', picture: '../../../images/exit.png', onClickHandler: leaveAccHandler }
     ]);
+
+    useEffect(() => {
+        setMenuItems(prevItems =>
+            prevItems.map(item => {
+                if (item.id === 1 && user) {
+                    return {
+                        ...item, onClickHandler: () => {
+                            navigate(`/main/channel/${user.tagname}`);
+                        }
+                    };
+                }
+                return item;
+            })
+        );
+    }, [user]);
 
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef(null);

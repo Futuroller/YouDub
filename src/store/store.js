@@ -4,6 +4,7 @@ import videosReducer from './slices/videosSlice';
 import playlistsReducer from './slices/playlistsSlice';
 import channelsReducer from './slices/channelsSlice'
 import commentsReducer from './slices/commentsSlice'
+import categoriesReducer from './slices/categoriesSlice';
 import uiReducer from './slices/uiSlice';
 
 export const store = configureStore({
@@ -13,6 +14,7 @@ export const store = configureStore({
         playlists: playlistsReducer,
         channels: channelsReducer,
         comments: commentsReducer,
+        categories: categoriesReducer,
         ui: uiReducer,
     },
 });

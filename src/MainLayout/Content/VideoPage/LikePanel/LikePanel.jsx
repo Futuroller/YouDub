@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import getMeasurementUnit from '../../../../utils/getMeasurementUnit';
 import m from './LikePanel.module.css'
 import apiRequest from '../../../../api/apiRequest';
@@ -71,12 +71,12 @@ function LikePanel(props) {
             </div>
             <div className={m.verticalLine}></div>
             <div className={m.shareContainer}>
-                <img src='../../../../images/share.png' alt="share" className={m.share} onClick={copyUrlToClipboard}/>
+                <img src='../../../../images/share.png' alt="share" title='Поделиться' className={m.share} onClick={copyUrlToClipboard} />
             </div>
-            {isCaptionExist ? 
-            <div className={m.caption}>
-                <p>Ссылка скопирована в буфер обмена</p>
-            </div> : ''}
+            {isCaptionExist ?
+                <div className={m.caption}>
+                    <p>Ссылка скопирована в буфер обмена</p>
+                </div> : ''}
         </div >
     );
 }

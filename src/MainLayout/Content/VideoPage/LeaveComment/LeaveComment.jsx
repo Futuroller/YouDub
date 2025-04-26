@@ -16,24 +16,33 @@ function LeaveComment(props) {
     };
 
     const onSendClick = async () => {
-            try {
-                const response = await apiRequest(`/main/comments/${props.url}`, 'POST', { comment });
-    
-                if (response.status === 200) {
-                    dispatch(fetchComments(props.url));
-                    setComment('')
-                } else {
-                    console.log(`Ошибка: ${response.message}`);
-                }
-            } catch (error) {
-                console.error(`Ошибка при оставлении комментария: ${error}`);
+        try {
+            const response = await apiRequest(`/main/comments/${props.url}`, 'POST', { comment });
+
+            if (response.status === 200) {
+                dispatch(fetchComments(props.url));
+                setComment('')
+            } else {
+                console.log(`Ошибка: ${response.message}`);
             }
-        };
+        } catch (error) {
+            console.error(`Ошибка при оставлении комментария: ${error}`);
+        }
+    };
+
+    const handleKeyDown = async (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            if (comment.trim().length > 0) {
+                onSendClick();
+            }
+        }
+    };
 
     return (
         <div className={m.container}>
             <img src={user.avatar_url ? `${API_URL_FILES}/avatars/${user.avatar_url}` : '../../../images/userDefault.png'} className={m.channelImage}></img>
-            <textarea className={m.commentField} value={comment} onChange={onCommentChange}></textarea>
+            <textarea className={m.commentField} value={comment} onChange={onCommentChange} onKeyDown={handleKeyDown}></textarea>
             {comment.length > 0 ? <img src='../../../images/sendComment.png' className={m.sendButton} onClick={onSendClick}></img> : ''}
         </div>
     );
