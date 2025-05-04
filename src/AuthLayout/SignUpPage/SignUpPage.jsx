@@ -14,7 +14,7 @@ function SignUpPage(props) {
     const [selectedCategories, setSelectedCategories] = useState([]);
 
     const [authFieldsData, setAuthFieldsData] = useState([
-        { id: 1, type: 'text', fieldTitle: 'Имя пользователя', placeholder: 'dubinsky', value: '' },
+        { id: 1, type: 'text', fieldTitle: 'Имя пользователя', placeholder: 'dubinsky', value: '', maxLength: 30 },
         { id: 2, type: 'email', fieldTitle: 'Email', placeholder: 'address@mail.ru', value: '' },
         { id: 3, type: 'password', fieldTitle: 'Пароль', placeholder: 'password', value: '' },
         { id: 4, type: 'password', fieldTitle: 'Повтор пароля', placeholder: 'password', value: '' },
@@ -28,7 +28,7 @@ function SignUpPage(props) {
 
     let authFields = authFieldsData.map(a => (
         <AuthField key={a.id} fieldTitle={a.fieldTitle} title={a.title} value={a.value} type={a.type}
-            placeholder={a.placeholder} onChange={(value) => textChange(a.id, value)} required />
+            placeholder={a.placeholder} onChange={(value) => textChange(a.id, value)} maxLength={a.maxLength} required />
     ));
 
     const onCategoriesClick = () => {

@@ -27,6 +27,9 @@ function VideoPage(props) {
     const { allPlaylists } = useSelector(state => state.playlists);
     const { allComments } = useSelector(state => state.comments);
     const playerRef = useRef(null);
+    const [isPlayerReady, setIsPlayerReady] = useState(false)
+    const [isPaused, setIsPaused] = useState(true)
+
 
     useEffect(() => {
         dispatch(fetchVideoByUrl(lastSegment));
@@ -37,26 +40,57 @@ function VideoPage(props) {
         };
     }, [lastSegment, dispatch]);
 
-    const onPlaylistClick = async (url) => {
+    useEffect(() => {
+        let interval;
+        if (isPlayerReady && typeof progressPercent === 'number') {
+            playerRef.current.seekTo(progressPercent / 100, 'fraction');
+
+            interval = setInterval(async () => {
+                const currentProgress = playerRef.current.getCurrentTime();
+                const duration = playerRef.current.getDuration();
+                const percent = Math.round((currentProgress / duration) * 100);
+
+                if (isPaused) {
+                    const response = await apiRequest(`/main/history/video/${url}`, 'PATCH', { progress_percent: percent });
+                    if (response.status !== 200) alert('Ошибка обновления прогресса просмотра');
+                }
+            }, 5000);
+        }
+        return () => {
+            if (interval) clearInterval(interval);
+        }
+    }, [isPlayerReady]);
+
+    const onPlaylistClick = async (url, inPlaylist) => {
         try {
-            const response = await apiRequest(`/main/playlists/video/${url}`, 'PATCH', { videoId: currentVideo.id });
+            const method = inPlaylist ? 'DELETE' : 'PATCH';
+            const response = await apiRequest(`/main/playlists/video/${url}`, method, { videoId: currentVideo.id });
             if (response.status === 200) {
-                alert('Видео добавлено в плейлист');
+                dispatch(fetchAllPlaylists());
             } else {
                 console.log(response);
             }
         } catch (error) {
-            console.error('Ошибка добавления в плейлист: ' + error);
-            alert('Ошибка добавления в плейлист');
+            console.error('Ошибка обновления плейлиста: ' + error);
+            alert('Ошибка обновления плейлиста');
         }
     };
 
-    const menuItems = allPlaylists.map(p => ({
-        id: p.id,
-        text: p.name,
-        onClickHandler: () => onPlaylistClick(p.url),
-        picture: '../../../../../images/plus.png'
-    }));
+    const isVideoInPlaylist = (playlist) => {
+        return playlist.playlist_videos?.some(pv => pv.id_video === currentVideo.id);
+    };
+
+    const menuItems = allPlaylists.map(p => {
+        const inPlaylist = isVideoInPlaylist(p);
+        return {
+            id: p.id,
+            text: p.name,
+            onClickHandler: () => onPlaylistClick(p.url, inPlaylist),
+            picture: inPlaylist ?
+                '../../../../../images/check.png' :
+                '../../../../../images/plus.png'
+        };
+    });
 
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef(null);
@@ -81,8 +115,9 @@ function VideoPage(props) {
     if (error) return <h1>Ошибка: {error}</h1>;
 
     const { name, description, url, load_date,
-        views, likes, dislikes, ownerSubscribersCount, id_owner } = currentVideo;
+        views, likes, dislikes, ownerSubscribersCount, id_owner, progressPercent } = currentVideo;
     const { username, avatar_url, tagname } = currentVideo.users;
+
 
     let commentsList;
     if (allComments) {
@@ -92,8 +127,6 @@ function VideoPage(props) {
                 avatar={c.user.avatar_url} currentReaction={c.currentUserReaction} videoOwnerId={id_owner} commentOwnerId={c.user.id} />
         ));
     }
-
-    console.log(currentVideo)
 
     return (
         <div className={m.container}>
@@ -106,6 +139,9 @@ function VideoPage(props) {
                         controls
                         width="100%"
                         height="100%"
+                        onReady={() => setIsPlayerReady(true)}
+                        onPause={() => setIsPaused(true)}
+                        onPlay={() => setIsPaused(false)}
                     />
                 )}
             </div>
@@ -130,7 +166,7 @@ function VideoPage(props) {
                             <img src='../../../../images/plus.png' className={m.plus} />
                         </div>
                         <div className={m.menuContainer} ref={menuRef}>
-                            {isOpen && <DropdownMenu menuItems={menuItems} top={'10px'} left={'-150px'} />}
+                            {isOpen && <DropdownMenu menuItems={menuItems} top={'-280px'} left={'-150px'} />}
                         </div>
                     </div>
                 </div>

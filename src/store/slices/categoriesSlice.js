@@ -3,6 +3,7 @@ import apiRequest from '../../api/apiRequest';
 
 const initialState ={
     allCategories: [],
+    usersCategories: [],
 };
 
 export const fetchCategories = createAsyncThunk(
@@ -11,6 +12,14 @@ export const fetchCategories = createAsyncThunk(
         const response = await apiRequest('/main/categories', 'GET');
         return response.categories;
     }
+);
+
+export const fetchUsersCategories = createAsyncThunk(
+  'categories/fetchUsersCategories',
+  async () => {
+      const response = await apiRequest(`/main/user/categories`, 'GET');
+      return response.categories;
+  }
 );
 
 const categoriesSlice = createSlice({
@@ -28,6 +37,19 @@ const categoriesSlice = createSlice({
             state.allCategories = categories;
           })
           .addCase(fetchCategories.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = action.error.message;
+          })
+
+          .addCase(fetchUsersCategories.pending, (state) => {
+            state.isLoading = true;
+          })
+          .addCase(fetchUsersCategories.fulfilled, (state, action) => {
+            state.isLoading = false;
+            const categories = action.payload;
+            state.usersCategories = categories;
+          })
+          .addCase(fetchUsersCategories.rejected, (state, action) => {
             state.isLoading = false;
             state.error = action.error.message;
           })

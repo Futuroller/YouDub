@@ -1,0 +1,83 @@
+.overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+}
+
+.container {
+    height: fit-content;
+    width: 400px;
+    border: 1px solid white;
+    border-radius: 25px;
+    background-color: #161616;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-left: 15px;
+    padding-right: 15px;
+    z-index: 99;
+    transition: 0.4s ease;
+}
+
+.topSide {
+    height: 70px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.title {
+    color: white;
+}
+
+.block h2 {
+    margin: 0%;
+    color: white;
+}
+
+.deleteButton {
+    height: 40px;
+    width: 40px;
+    background-color: #ffffff00;
+    background-image: url('../../../../../images/cross.png');
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.deleteButton:hover {
+    border: 1px solid rgba(255, 255, 255, 0);
+}
+
+.block {
+    height: fit-content;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    max-height: fit-content;
+    margin-bottom: 20px;
+}
+
+.fieldText {
+    color: #CFCFCF;
+    font-size: 18px;
+    margin: 0;
+}
+
+.showMore {
+    margin: 0;
+    text-decoration: underline;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+}

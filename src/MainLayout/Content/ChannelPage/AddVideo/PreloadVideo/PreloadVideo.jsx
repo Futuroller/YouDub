@@ -14,10 +14,10 @@ function PreloadVideo(props) {
             <div className={m.underPreview}>
                 <img src={props.channelImage ? `${API_URL_FILES}avatars/${props.channelImage}` : '../../../../images/userDefault.png'} className={m.channelImage}></img>
                 <div className={m.videoDescription}>
-                    <p className={m.title}>{passPartOfText(props.title, 22)}</p>
+                    <p className={m.title}>{props.title}</p>
                     <div className={m.nameAndDescription}>
                         <p className={m.channelName}>{props.channelName}</p>
-                        <p className={m.channelName}>{passPartOfText(description, 25)}</p>
+                        <p className={m.channelDescription}>{description}</p>
                     </div>
                     <div className={m.stats}>
                         <p>{setWordEnding(getMeasurementUnit(props.views), 'просмотр', '', 'а', 'ов')}</p>

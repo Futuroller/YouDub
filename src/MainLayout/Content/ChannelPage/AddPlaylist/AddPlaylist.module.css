@@ -1,0 +1,84 @@
+.container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.playlistContainer {
+    width: 700px;
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.otherInfoContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.otherInfoContainer input,
+textarea {
+    color: white;
+}
+
+.title {
+    font-size: 32px;
+    margin-bottom: 10px;
+    font-weight: 700;
+    color: white;
+}
+
+.name {
+    height: 30px;
+    width: 600px;
+    border-radius: 20px;
+    font-size: 16px;
+    padding-left: 10px;
+}
+
+.description {
+    height: 80px;
+    width: 600px;
+    border-radius: 20px;
+    font-size: 16px;
+    padding: 10px;
+}
+
+.caption {
+    margin: 0;
+}
+
+.headerButtonsContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.headerButton {
+    margin: 15px;
+    margin-bottom: 30px;
+}
+
+.changeButtons {
+    width: 300px;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    align-self: flex-end;
+    margin-right: 10%;
+}
+
+input[type="radio"] {
+    accent-color: #ff0149;
+    width: 25px;
+    height: 17px;
+}
+
+.radio {
+    font-size: 20px;
+}

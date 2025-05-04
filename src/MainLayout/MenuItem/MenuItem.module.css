@@ -1,9 +1,3 @@
-.itemImage {
-    width: 30px;
-    height: 30px;
-    object-fit: cover;
-}
-
 .container {
     display: flex;
     justify-content: flex-start;
@@ -11,6 +5,13 @@
     color: white;
     font-size: 18px;
     user-select: none;
+    cursor: pointer;
+}
+
+.itemImage {
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
 }
 
 .container * {

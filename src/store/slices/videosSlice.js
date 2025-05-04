@@ -7,11 +7,21 @@ const initialState ={
     watchHistory: [],     // История просмотров
     subscriptions: [],    // Видео с каналов, на которые подписан
     playlists: [],        // Плейлисты
-    recommended: [],       // Рекомендации
+    searchVideos: [],       // Видео по запросу
     currentVideo: {},
     reactionForCurrentVideo: {},
+
     isLoading: false,      // Лоадер
     error: null,
+    
+    recommendationsStatus: {
+      isLoading: false,      // Лоадер
+      error: null,
+    },
+    searchStatus: {
+      isLoading: false,      // Лоадер
+      error: null,
+    },
 };
 
 export const fetchVideos = createAsyncThunk(
@@ -32,7 +42,7 @@ export const fetchVideoByUrl = createAsyncThunk(
 
 export const fetchVideosFromChannel = createAsyncThunk(
     'videos/fetchVideosFromChannel',
-    async (tagname, { page, limit }) => {
+    async ({ tagname, page, limit }) => {
       const response = await apiRequest(`/main/videos/channel/${tagname}`, 'POST', { page, limit });
       return response.myVideos;
   }
@@ -62,6 +72,14 @@ export const fetchVideosFromPlaylist = createAsyncThunk(
   }
 );
 
+export const fetchSearchVideos = createAsyncThunk(
+  'videos/fetchSearchVideos',
+  async ({ searchQuery, page, limit }) => {
+      const response = await apiRequest(`/main/videos/search/${searchQuery}`, 'POST', { page, limit });
+      return response.videos;
+  }
+);
+
 const videosSlice = createSlice({
     name: 'videos',
     initialState,
@@ -87,25 +105,30 @@ const videosSlice = createSlice({
         clearVideosFromSubChannel: (state) => {
           state.subscriptions = [];
         },
+        clearSearchVideos: (state) => {
+          state.searchVideos = [];
+        },
     },
     extraReducers: (builder) => {
         builder
           // ✅ Подгрузка всех видео (ленивая загрузка)
           .addCase(fetchVideos.pending, (state) => {
-            state.isLoading = true;
+            state.recommendationsStatus.isLoading = true;
           })
           .addCase(fetchVideos.fulfilled, (state, action) => {
-            state.isLoading = false;
+            state.recommendationsStatus.isLoading = false;
             const newVideos = action.payload;
             // Фильтруем новые видео, чтобы не добавлять уже существующие
             const uniqueVideos = newVideos.filter(video => 
                 !state.allVideos.some(existingVideo => existingVideo.id === video.id)
             );
-            state.allVideos = [...state.allVideos, ...uniqueVideos]; // Лениво загружаем видео
+            const shuffledVideos = [...state.allVideos, ...uniqueVideos]
+            // .sort(() => Math.random() - 0.5)
+            state.allVideos = shuffledVideos;
           })
           .addCase(fetchVideos.rejected, (state, action) => {
-            state.isLoading = false;
-            state.error = action.error.message;
+            state.recommendationsStatus.isLoading = false;
+            state.recommendationsStatus.error = action.error.message;
           })
     
           // ✅ Мои видео
@@ -139,7 +162,7 @@ const videosSlice = createSlice({
             );
 
             const combined = [...state.watchHistory, ...uniqueVideos];
-            state.watchHistory = combined.sort((a, b) => new Date(b.watched_at) - new Date(a.watched_at));          
+            state.watchHistory = combined.sort((a, b) => new Date(b.watched_at) - new Date(a.watched_at));
           })
           .addCase(fetchHistory.rejected, (state, action) => {
             state.isLoading = false;
@@ -199,10 +222,28 @@ const videosSlice = createSlice({
             state.isLoading = false;
             state.error = action.error.message;
           })
+
+          .addCase(fetchSearchVideos.pending, (state) => {
+            state.searchStatus.isLoading = true;
+          })
+          .addCase(fetchSearchVideos.fulfilled, (state, action) => {
+            state.searchStatus.isLoading = false;
+            const newVideos = action.payload;
+            const uniqueVideos = newVideos.filter(video => 
+                !state.searchVideos.some(existingVideo => existingVideo.id === video.id)
+            );
+            
+            const combined = [...state.searchVideos, ...uniqueVideos]; // Лениво загружаем видео
+            state.searchVideos = combined.sort((a, b) => new Date(b.views) - new Date(a.views));
+          })
+          .addCase(fetchSearchVideos.rejected, (state, action) => {
+            state.searchStatus.isLoading = false;
+            state.searchStatus.error = action.error.message;
+          })
       }
     });
 
-export const { clearVideos, clearPlaylist, clearHistoryVideos, removeHistoryVideo, clearChannelVideos, clearCurrentVideo, clearVideosFromSubChannel } = videosSlice.actions;
+export const { clearVideos, clearPlaylist, clearHistoryVideos, removeHistoryVideo, clearChannelVideos, clearCurrentVideo, clearVideosFromSubChannel, clearSearchVideos } = videosSlice.actions;
 
 export default videosSlice.reducer;
     

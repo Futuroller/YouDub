@@ -3,8 +3,8 @@ import m from './CategoriesModal.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCategories } from '../../store/slices/categoriesSlice';
 
-function CategoriesModal({ onClose, onSelect }) {
-    const [selected, setSelected] = useState([]);
+function CategoriesModal({ onClose, onSelect, usersCategories = [] }) {
+    const [selected, setSelected] = useState(usersCategories.map(c => c.id));
     const { allCategories, isLoading, error } = useSelector(state => state.categories);
     const dispatch = useDispatch();
 
@@ -13,15 +13,17 @@ function CategoriesModal({ onClose, onSelect }) {
     }, [dispatch]);
 
     const toggleCategory = (category) => {
-        if (selected.includes(category)) {
-            setSelected(selected.filter(c => c !== category));
+        if (selected.includes(category.id)) {
+            setSelected(selected.filter(id => id !== category.id));
         } else {
-            setSelected([...selected, category]);
+            setSelected([...selected, category.id]);
         }
     };
 
     const confirmSelection = () => {
-        onSelect(selected);
+        onSelect(selected.map(catId => {
+            return allCategories.find(cat => cat.id === catId);
+        }));
         onClose();
     };
 
@@ -36,7 +38,7 @@ function CategoriesModal({ onClose, onSelect }) {
                     {allCategories.map((c) => (
                         <button
                             key={c.id}
-                            className={`${m.category} ${selected.includes(c) ? m.selected : ''}`}
+                            className={`${m.category} ${selected.includes(c.id) ? m.selected : ''}`}
                             onClick={() => toggleCategory(c)}
                         >
                             {c.name}

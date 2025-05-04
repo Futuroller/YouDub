@@ -4,6 +4,9 @@ import { API_URL_FILES } from '../../../../config';
 import m from './EditChannel.module.css';
 import { setUser } from '../../../../store/slices/userSlice';
 import apiRequest from '../../../../api/apiRequest';
+import CategoriesModal from '../../../../AuthLayout/CategoriesModal/CategoriesModal';
+import { fetchUsersCategories } from '../../../../store/slices/categoriesSlice';
+import { areArraysEqual } from '../../../../utils/areArraysEqual';
 
 function EditChannel(props) {
     const user = useSelector((state) => state.user);
@@ -14,6 +17,9 @@ function EditChannel(props) {
     const [avatar, setAvatar] = useState(`${API_URL_FILES}/avatars/${user.avatar_url}`);
     const [headerPreview, setHeaderPreview] = useState(user.channel_header_url ? `${API_URL_FILES}/headers/${user.channel_header_url}` : '../../../../images/channelHeader.jpg');
     const [header, setHeader] = useState(`${API_URL_FILES}/headers/${user.channel_header_url}`);
+    const { usersCategories } = useSelector(state => state.categories);
+    const [selectedCategories, setSelectedCategories] = useState([]);
+    const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
         if (user) {
@@ -23,8 +29,13 @@ function EditChannel(props) {
             setAvatar(null);
             setHeaderPreview(user.channel_header_url ? `${API_URL_FILES}/headers/${user.channel_header_url}` : '../../../../images/channelHeader.jpg');
             setHeader(null);
+            dispatch(fetchUsersCategories());
         }
     }, [user])
+
+    useEffect(() => {
+        setSelectedCategories(usersCategories)
+    }, [usersCategories])
 
     const onNameChange = (e) => {
         const text = e.target.value;
@@ -65,6 +76,14 @@ function EditChannel(props) {
 
         if (user.username !== channelName) updatedFields.username = channelName;
         if (user.description !== channelDescription) updatedFields.description = channelDescription;
+        if (!areArraysEqual(usersCategories.map(c => c.id), selectedCategories.map(c => c.id))) {
+            if (selectedCategories.length >= 3) {
+                updatedFields.categories = JSON.stringify(selectedCategories);
+            } else {
+                alert('Выберите как минимум 3 любимые категории');
+                return;
+            }
+        }
 
         const formData = new FormData();
         if (avatar) formData.append('avatar', avatar);
@@ -83,7 +102,6 @@ function EditChannel(props) {
 
             if (response.status === 200) {
                 dispatch(setUser(response));
-                console.log(response)
                 alert('Данные обновлены');
             } else {
                 console.log(`Ошибка: ${response.message}`);
@@ -115,6 +133,10 @@ function EditChannel(props) {
         }
     };
 
+    const onCategoriesClick = () => {
+        setShowModal(true);
+    };
+
     return (
         <div className={m.container}>
             <div className={m.avatarContainer}>
@@ -130,11 +152,11 @@ function EditChannel(props) {
             <div className={m.otherInfoContainer}>
                 <div>
                     <p className={m.title}>Название канала</p>
-                    <input type='text' className={m.name} value={channelName} onChange={onNameChange}></input>
+                    <input type='text' className={m.name} value={channelName} onChange={onNameChange} maxLength='30'></input>
                 </div>
                 <div>
                     <p className={m.title}>Описание канала</p>
-                    <textarea className={m.description} value={channelDescription} onChange={onDescriptionChange}></textarea>
+                    <textarea className={m.description} value={channelDescription} onChange={onDescriptionChange} maxLength='700'></textarea>
                 </div>
                 <div>
                     <p className={m.title}>Шапка канала</p>
@@ -151,11 +173,18 @@ function EditChannel(props) {
                     </div>
                     <p>Рекомендуемый размер - 1500x400px</p>
                 </div>
+                <div className={m.categories} onClick={onCategoriesClick}>
+                    <img src='../../../images/categories.png'></img>
+                    <p>Выбери любимые категории</p>
+                </div>
                 <div className={m.changeButtons}>
                     <button className={m.headerButton} style={{ marginBottom: '30px' }} onClick={onCancelClick}>Отменить</button>
                     <button className={m.headerButton} style={{ marginBottom: '30px' }} onClick={onSaveClick}>Сохранить</button>
                 </div>
             </div>
+            {showModal && (
+                <CategoriesModal onClose={() => setShowModal(false)} onSelect={(categories) => setSelectedCategories(categories)} usersCategories={selectedCategories} />
+            )}
         </div >
     );
 }

@@ -1,27 +1,39 @@
-import { fetchVideos } from '../../../store/slices/videosSlice';
+import { clearSearchVideos, clearVideos, fetchSearchVideos } from '../../../store/slices/videosSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Video from '../Video/Video';
-import m from './MainPage.module.css'
+import m from './SearchResultsPage.module.css'
 import { API_URL_FILES } from '../../../config';
+import { useLocation } from 'react-router-dom';
 
-function MainPage({ contentRef }) {
+function SearchResultsPage({ contentRef }) {
+    const location = useLocation();
     const dispatch = useDispatch();
-    const { allVideos, recommendationsStatus } = useSelector(state => state.videos);
+    const [query, setQuery] = useState(new URLSearchParams(location.search).get('query') || '');
+
+    const { searchVideos, searchStatus } = useSelector(state => state.videos);
     const isCollapsed = useSelector(state => state.ui.isNavbarCollapsed);
     const [isFetchingMore, setIsFetchingMore] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const [page, setPage] = useState(1);
 
     useEffect(() => {
-        dispatch(fetchVideos({ page, limit: 12 }));
-    }, []);
+        const newQuery = new URLSearchParams(location.search).get('query') || '';
+
+        setQuery(newQuery);
+        setPage(1);
+        setHasMore(true)
+        dispatch(clearSearchVideos());
+        if (newQuery) {
+            dispatch(fetchSearchVideos({ searchQuery: newQuery, page, limit: 12 }));
+        }
+    }, [location.search, dispatch]);
 
     const loadMore = async () => {
-        if (isFetchingMore || recommendationsStatus.isLoading) return;
+        if (isFetchingMore || searchStatus.isLoading || !hasMore) return;
         setIsFetchingMore(true);
 
-        const action = await dispatch(fetchVideos({ page, limit: 12 }));
+        const action = await dispatch(fetchSearchVideos({ searchQuery: query, page, limit: 12 }));
         const newVideos = action.payload;
 
         if (!newVideos || newVideos.length === 0) {
@@ -35,7 +47,7 @@ function MainPage({ contentRef }) {
 
     const handleScroll = () => {
         const element = contentRef.current;
-        if (!element || isFetchingMore || recommendationsStatus.isLoading || !hasMore) return;
+        if (!element || isFetchingMore || searchStatus.isLoading || !hasMore) return;
 
         const { scrollTop, clientHeight, scrollHeight } = element;
 
@@ -50,22 +62,21 @@ function MainPage({ contentRef }) {
 
         current.addEventListener('scroll', handleScroll);
         return () => current.removeEventListener('scroll', handleScroll);
-    }, [isFetchingMore, recommendationsStatus.isLoading]);
+    }, [isFetchingMore, searchStatus.isLoading]);
 
-    // if (recommendationsStatus.isLoading) return <h1>Загрузка...</h1>;
-    if (recommendationsStatus.error) return <h1>Ошибка: {error}</h1>;
-    console.log(allVideos)
-    let videosList = allVideos.map(v => (
+    if (searchStatus.error) return <h1>Ошибка: {searchStatus.error}</h1>;
+
+    let videosList = searchVideos.map(v => (
         <Video key={v.id} title={v.name} description={v.description} channelName={v.owner_username}
             preview={v.preview_url ? `${API_URL_FILES}previews/${v.preview_url}` : '../../../images/preview.jpg'}
             channelImage={v.owner_channel_image} url={v.url}
-            views={v.views} loadDate={v.load_date} progressPercent={v.progress_percent} />
+            views={v.views} loadDate={v.load_date} />
     ));
 
     return (
         <div className={`${m.container} ${isCollapsed ? m.expanded : m.narrow}`}>
             <div className={m.videos}>
-                {videosList}
+                {videosList.length > 0 ? videosList : <p className={m.caption}>По вашему запросу ничего не нашлось</p>}
             </div>
             <div className={m.botomCaption}>
                 {isFetchingMore && hasMore && <p className={m.loadingData}>Загрузка...</p>}
@@ -75,4 +86,4 @@ function MainPage({ contentRef }) {
     );
 }
 
-export default MainPage;
+export default SearchResultsPage;

@@ -1,0 +1,37 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 100%;
+    margin-bottom: 40px;
+}
+
+.videos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin: 0 auto;
+    transition: max-width 0.3s ease;
+    width: 100%;
+}
+
+.narrow {
+    max-width: 70%;
+}
+
+.expanded {
+    max-width: 95%;
+}
+
+.loadingData {
+    color: white;
+}
+
+.botomCaption {
+    display: flex;
+    justify-content: center;
+}
+
+.caption {
+    font-size: 20px;
+}

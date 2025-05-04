@@ -154,6 +154,35 @@
     width: 130px;
 }
 
+.categories {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 300px;
+    text-wrap: nowrap;
+    border-bottom: 1px solid #FF0149;
+    border-radius: 10px;
+    background-color: #0f0f0f;
+    padding-left: 7px;
+    padding-right: 7px;
+    height: 50px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.categories:hover {
+    background-color: rgb(8, 8, 8);
+}
+
+.categories img {
+    width: 40px;
+    height: 40px;
+}
+
+.categories p {
+    font-size: 19px;
+}
+
 .changeButtons {
     width: 300px;
     height: 100%;

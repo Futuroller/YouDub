@@ -1,21 +1,18 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import m from './AddVideo.module.css';
-import { setUser } from '../../../../store/slices/userSlice';
 import apiRequest from '../../../../api/apiRequest';
 import passPartOfText from '../../../../utils/passPartOfText';
 import ComboBox from './ComboBox/ComboBox';
-import Video from '../../Video/Video';
 import ReactPlayer from 'react-player';
 import PreloadVideo from './PreloadVideo/PreloadVideo';
 
 function AddVideo(props) {
     const user = useSelector((state) => state.user);
-    const dispatch = useDispatch();
     const [video, setVideo] = useState();
     const [videoPreviewUrl, setVideoPreviewUrl] = useState(null);
-    const [videoName, setVideoName] = useState();
-    const [videoDescription, setVideoDescription] = useState();
+    const [videoName, setVideoName] = useState('');
+    const [videoDescription, setVideoDescription] = useState('');
     const [preview, setPreview] = useState();
     const [showPreview, setShowPreview] = useState();
     const [videoPlaylist, setVideoPlaylist] = useState();
@@ -44,16 +41,6 @@ function AddVideo(props) {
 
         fetchData();
     }, [])
-
-    const onNameChange = (e) => {
-        const text = e.target.value;
-        setVideoName(text);
-    };
-
-    const onDescriptionChange = (e) => {
-        const text = e.target.value;
-        setVideoDescription(text);
-    };
 
     const onTagsChange = (e) => {
         const text = e.target.value;
@@ -133,11 +120,9 @@ function AddVideo(props) {
 
             if (response.status === 200) {
                 alert('Видео успешно загружено');
-                console.log(response)
-                // onCancelClick();
             } else {
-                alert(`Ошибка загрузки: ${response.message || 'Неизвестная ошибка'}`);
-                console.log(response);
+                alert(`Ошибка загрузки видео`);
+                console.error(`${response.message || 'Неизвестная ошибка'}`);
             }
         } catch (error) {
             console.error('Ошибка при отправке видео:', error);
@@ -156,7 +141,6 @@ function AddVideo(props) {
                 <PreloadVideo title={videoName} channelName={user.username}
                     preview={showPreview || '../../../images/preview.jpg'} channelImage={user.avatar_url}
                     views='0' loadDate={new Date()} description={videoDescription} />
-                <button className={m.headerButton} onClick={onSaveClick}>Опубликовать</button>
             </div>
             <div className={m.otherInfoContainer}>
                 <div>
@@ -175,11 +159,11 @@ function AddVideo(props) {
                 </div>
                 <div>
                     <p className={m.title}>Название</p>
-                    <input type='text' className={m.name} value={videoName} onChange={onNameChange}></input>
+                    <input type='text' className={m.name} value={videoName} onChange={(e) => setVideoName(e.target.value)}></input>
                 </div>
                 <div>
                     <p className={m.title}>Описание</p>
-                    <textarea className={m.description} value={videoDescription} onChange={onDescriptionChange}></textarea>
+                    <textarea className={m.description} value={videoDescription} onChange={(e) => setVideoDescription(e.target.value)}></textarea>
                 </div>
                 <div>
                     <p className={m.title}>Превью</p>
@@ -227,7 +211,8 @@ function AddVideo(props) {
                     </label>
                 </fieldset>
                 <div className={m.changeButtons}>
-                    <button className={m.headerButton} style={{ marginBottom: '30px' }} onClick={onCancelClick}>Отменить</button>
+                    <button className={m.headerButton} onClick={onSaveClick}>Опубликовать</button>
+                    <button className={m.headerButton} onClick={onCancelClick}>Отменить</button>
                 </div>
             </div>
         </div >

@@ -1,19 +1,15 @@
 import { useSelector } from 'react-redux';
 import m from './ChannelHeader.module.css'
-import { useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { API_URL_FILES } from '../../../../config';
 import setWordEnding from '../../../../utils/setWordEnding';
 import passPartOfText from '../../../../utils/passPartOfText';
 import MyChannelButton from '../MyChannelButton/MyChannelButton';
 import SubButton from '../../VideoPage/ChannelInfo/SubButton/SubButton';
+import { useState } from 'react';
 
-function ChannelHeader({ channel }) {
+function ChannelHeader({ channel, onModalOpen }) {
     const user = useSelector((state) => state.user);
-    const navigator = useNavigate();
-
-    const configureChannelHandler = () => {
-        navigator('configure-channel');
-    };
 
     return (
         <div className={m.container}>
@@ -23,15 +19,18 @@ function ChannelHeader({ channel }) {
                 <div className={m.channelInfo}>
                     <p className={m.channelName}>{channel.username}</p>
                     <div className={m.tagAndStat}>
+                        <p className={m.tagname}>{channel.tagname}</p>
                         <p>{setWordEnding(channel.subscribersCount, 'подписчик', '', 'а', 'ов')}</p>
                         <p>{setWordEnding(channel.subscriptionsCount, 'подпис', 'ка', 'ки', 'ок')}</p>
                     </div>
                     <p className={m.description}>{passPartOfText(channel.description, 39)}</p>
-                    <p className={m.aboutChannel}>О канале</p>
+                    <p className={m.aboutChannel} onClick={onModalOpen}>О канале</p>
                 </div>
                 <div className={m.buttonContainer}>
                     {channel.tagname === user.tagname ?
-                        <MyChannelButton buttonText='Настроить вид канала' OnClickHandler={configureChannelHandler} icon='../../../images/settings.png' /> :
+                        <NavLink to='/main/my-channel/configure-channel'>
+                            <MyChannelButton buttonText='Настройки профиля' icon='../../../images/settings.png' />
+                        </NavLink> :
                         <SubButton channelTagname={channel.tagname} isUserFollowed={channel.isFollowed} />}
                 </div>
             </div>

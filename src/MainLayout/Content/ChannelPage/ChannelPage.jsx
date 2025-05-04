@@ -8,6 +8,7 @@ import { clearChannelVideos, clearVideos, fetchVideosFromChannel } from '../../.
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { API_URL_FILES } from '../../../config';
 import { clearCurrentChannel, fetchChannelByTagname } from '../../../store/slices/channelsSlice';
+import ChannelModal from './ChannelModal/ChannelModal';
 
 function ChannelPage(props) {
 
@@ -20,6 +21,7 @@ function ChannelPage(props) {
     const { channelVideos, isLoading, error } = useSelector(state => state.videos);
     const { currentChannel, currentChannelStatus } = useSelector(state => state.channels);
     const isCollapsed = useSelector(state => state.ui.isNavbarCollapsed);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const onAddVideoClick = () => {
         navigate('/main/my-channel/add-video');
@@ -32,7 +34,7 @@ function ChannelPage(props) {
     const [page, setPage] = useState(1);
 
     useEffect(() => {
-        dispatch(fetchVideosFromChannel(lastSegment, { page, limit: 10 }));
+        dispatch(fetchVideosFromChannel({ tagname: lastSegment, page, limit: 10 }));
         dispatch(fetchChannelByTagname(lastSegment));
 
         return () => {
@@ -69,12 +71,10 @@ function ChannelPage(props) {
             views={v.views} loadDate={v.load_date} />
     ));
 
-    console.log(currentChannel)
-
     return (
         <div className={m.container}>
             <div className={m.withoutVideoContainer}>
-                <ChannelHeader channel={currentChannel} />
+                <ChannelHeader channel={currentChannel} onModalOpen={() => setIsModalOpen(true)} />
                 {currentChannel.tagname === user.tagname ? <div className={m.buttonsContainer}>
                     <MyChannelButton buttonText='Добавить видео' OnClickHandler={onAddVideoClick} icon='../../../images/addVideo.png' />
                     <MyChannelButton buttonText='Создать плейлист' OnClickHandler={onAddPlaylistClick} icon='../../../images/playlistsIcon.png' />
@@ -85,6 +85,7 @@ function ChannelPage(props) {
             <div className={`${m.videos} ${isCollapsed ? m.expanded : m.narrow}`}>
                 {videosList.length > 0 ? videosList : <p className={m.caption}>На канале нет видеороликов</p>}
             </div>
+            {isModalOpen ? <ChannelModal channel={currentChannel} onCloseClick={() => setIsModalOpen(false)} /> : ''}
         </div>
     );
 }

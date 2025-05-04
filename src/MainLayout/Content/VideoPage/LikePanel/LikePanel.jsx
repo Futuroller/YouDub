@@ -2,8 +2,12 @@ import { useState } from 'react';
 import getMeasurementUnit from '../../../../utils/getMeasurementUnit';
 import m from './LikePanel.module.css'
 import apiRequest from '../../../../api/apiRequest';
+import { useDispatch } from 'react-redux';
+import { fetchAllPlaylists } from '../../../../store/slices/playlistsSlice';
 
 function LikePanel(props) {
+    const dispatch = useDispatch();
+
     const [reaction, setReaction] = useState(props.reactionId.id_reaction === 1 ? 'like' : props.reactionId.id_reaction === 2 ? 'dislike' : null);
     const [likesCount, setLikesCount] = useState(props.likes);
     const [dislikesCount, setDislikesCount] = useState(props.dislikes);
@@ -35,7 +39,9 @@ function LikePanel(props) {
         const response = await apiRequest(`/main/videos/reaction/${props.videoUrl}`, 'PATCH', { reaction: updatedReaction });
         if (response.status !== 200) {
             console.error('Вы не можете поставить реакцию: ' + response.message);
+            return;
         }
+        dispatch(fetchAllPlaylists())
     };
 
     const likeIcon = reaction === 'like'

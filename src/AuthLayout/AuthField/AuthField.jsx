@@ -11,6 +11,7 @@ function AuthField(props) {
                 placeholder={props.placeholder}
                 value={props.value}
                 onChange={(e) => props.onChange(e.target.value)}
+                maxLength={props.maxLength}
                 required
             />
         </div>
