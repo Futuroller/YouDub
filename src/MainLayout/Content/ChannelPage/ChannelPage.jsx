@@ -4,7 +4,7 @@ import MyChannelButton from './MyChannelButton/MyChannelButton';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import m from './ChannelPage.module.css';
-import { clearChannelVideos, clearVideos, fetchVideosFromChannel } from '../../../store/slices/videosSlice';
+import { clearChannelVideos, fetchVideosFromChannel } from '../../../store/slices/videosSlice';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { API_URL_FILES } from '../../../config';
 import { clearCurrentChannel, fetchChannelByTagname } from '../../../store/slices/channelsSlice';
@@ -64,12 +64,15 @@ function ChannelPage(props) {
     if (currentChannelStatus.isLoading) return <h1 className={m.loadingData}>Загрузка...</h1>;
     if (currentChannelStatus.error) return <h1>Ошибка: {error}</h1>;
 
-    let videosList = channelVideos.map(v => (
-        <Video key={v.id} title={v.name} description={v.description} channelName={v.owner_username}
-            preview={v.preview_url ? `${API_URL_FILES}previews/${v.preview_url}` : '../../../images/preview.jpg'}
-            channelImage={v.owner_channel_image} url={v.url}
-            views={v.views} loadDate={v.load_date} />
-    ));
+    let videosList =
+        channelVideos.map(v => (
+            <Video key={v.id} title={v.name} description={v.description} channelName={v.owner_username}
+                preview={v.preview_url ? `${API_URL_FILES}previews/${v.preview_url}` : '../../../images/preview.jpg'}
+                channelImage={v.owner_channel_image} url={v.url}
+                views={v.views} loadDate={v.load_date} canEdit={currentChannel.tagname === user.tagname}
+                progressPercent={v.progress_percent} idUserRole={user.id_role}
+                isUserOwner={currentChannel.tagname === user.tagname} />
+        ))
 
     return (
         <div className={m.container}>
@@ -82,9 +85,16 @@ function ChannelPage(props) {
                 <Outlet />
                 <p className={m.label}>Видео</p>
             </div>
-            <div className={`${m.videos} ${isCollapsed ? m.expanded : m.narrow}`}>
-                {videosList.length > 0 ? videosList : <p className={m.caption}>На канале нет видеороликов</p>}
+            <div className={`${m.videosContainer} ${isCollapsed ? m.expanded : m.narrow}`}>
+                <div className={m.videos}>
+                    {!currentChannel.is_banned ?
+                        videosList.length > 0 ?
+                            videosList :
+                            <p className={m.caption}>На канале нет видеороликов</p> :
+                        <p className={m.caption}>Пользователь заблокирован</p>}
+                </div>
             </div>
+
             {isModalOpen ? <ChannelModal channel={currentChannel} onCloseClick={() => setIsModalOpen(false)} /> : ''}
         </div>
     );

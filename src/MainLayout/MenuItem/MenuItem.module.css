@@ -12,6 +12,11 @@
     width: 30px;
     height: 30px;
     object-fit: cover;
+
+    @media (max-width: 480px) {
+        width: 23px;
+        height: 23px;
+    }
 }
 
 .container * {

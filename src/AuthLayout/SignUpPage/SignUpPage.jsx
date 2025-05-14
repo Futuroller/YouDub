@@ -57,7 +57,7 @@ function SignUpPage(props) {
                                 alert('Аккаунт создан. Активируйте его на вашем email-адресе');
                                 navigate('/auth/login');
                             } else {
-                                alert('Ошибка при создании аккаунта');
+                                alert(response.message);
                             }
                         } catch (error) {
                             console.error('Ошибка:', error);

@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import m from './AddVideo.module.css';
 import apiRequest from '../../../../api/apiRequest';
 import passPartOfText from '../../../../utils/passPartOfText';
-import ComboBox from './ComboBox/ComboBox';
+import ComboBox from '../ComboBox/ComboBox';
 import ReactPlayer from 'react-player';
-import PreloadVideo from './PreloadVideo/PreloadVideo';
+import PreloadVideo from '../PreloadVideo/PreloadVideo';
 
 function AddVideo(props) {
     const user = useSelector((state) => state.user);
@@ -157,11 +157,11 @@ function AddVideo(props) {
                         </div>
                     )}
                 </div>
-                <div>
+                <div className={m.textField}>
                     <p className={m.title}>Название</p>
                     <input type='text' className={m.name} value={videoName} onChange={(e) => setVideoName(e.target.value)}></input>
                 </div>
-                <div>
+                <div className={m.textField}>
                     <p className={m.title}>Описание</p>
                     <textarea className={m.description} value={videoDescription} onChange={(e) => setVideoDescription(e.target.value)}></textarea>
                 </div>
@@ -181,7 +181,7 @@ function AddVideo(props) {
                 </div>
                 <ComboBox title='Добавить в плейлист' onChange={setVideoPlaylist} options={playlists}></ComboBox>
                 <ComboBox title='Категория' onChange={setVideoCategory} options={categories}></ComboBox>
-                <div>
+                <div className={m.textField}>
                     <p className={m.title}>Теги</p>
                     <textarea
                         className={m.description}

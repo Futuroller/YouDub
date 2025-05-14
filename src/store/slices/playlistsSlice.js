@@ -46,6 +46,9 @@ const playlistsSlice = createSlice({
         clearCurrentPlaylist: (state) => {
             state.currentPlaylist = [];
         },
+        clearPlaylistByUrl: (state, action) => {
+            state.allPlaylists = state.allPlaylists.filter(playlist => playlist.url !== action.payload);
+        }
     },
     extraReducers: (builder) => {
       builder
@@ -81,6 +84,6 @@ const playlistsSlice = createSlice({
       }
     });
 
-export const { clearPlaylists, clearCurrentPlaylist } = playlistsSlice.actions;
+export const { clearPlaylists, clearCurrentPlaylist, clearPlaylistByUrl } = playlistsSlice.actions;
 
 export default playlistsSlice.reducer;

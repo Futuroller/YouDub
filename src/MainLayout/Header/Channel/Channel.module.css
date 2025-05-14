@@ -25,3 +25,9 @@
 .menuContainer {
     position: relative;
 }
+
+@media (max-width: 650px) {
+    .channelTitle {
+        display: none;
+    }
+}

@@ -14,4 +14,13 @@
     width: 400px;
     height: 35px;
     border-radius: 5px;
+    transition: 0.2s ease;
+
+}
+
+@media (max-width: 500px) {
+    .container select {
+        width: 350px;
+        transition: 0.2s ease;
+    }
 }

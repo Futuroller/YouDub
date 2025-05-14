@@ -32,21 +32,27 @@ textarea {
     color: white;
 }
 
+.textField {
+    width: 100%;
+}
+
 .name {
     height: 30px;
-    width: 600px;
+    width: 50%;
     border-radius: 20px;
     font-size: 16px;
     padding-left: 10px;
 }
 
+
 .description {
     height: 80px;
-    width: 600px;
+    width: 65%;
     border-radius: 20px;
     font-size: 16px;
     padding: 10px;
 }
+
 
 .caption {
     margin: 0;
@@ -61,6 +67,7 @@ textarea {
 .headerButton {
     margin: 15px;
     margin-bottom: 30px;
+    width: 200px;
 }
 
 .changeButtons {
@@ -81,4 +88,34 @@ input[type="radio"] {
 
 .radio {
     font-size: 20px;
+}
+
+@media (max-width: 1050px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .playlistContainer {
+        width: fit-content;
+    }
+
+    .headerSubContainer {
+        width: 240px;
+        height: 112px;
+    }
+}
+
+@media (max-width: 800px) {
+    .headerContainer {
+        flex-direction: column;
+    }
+
+    .headerContainer {
+        width: unset;
+    }
+
+    .headerSubContainer {
+        width: 200px;
+        height: 100px;
+    }
 }

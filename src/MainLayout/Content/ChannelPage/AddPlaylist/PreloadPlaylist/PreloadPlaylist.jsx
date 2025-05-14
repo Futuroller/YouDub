@@ -15,7 +15,7 @@ function PreloadPlaylist(props) {
                 <div className={m.videoDescription}>
                     <div className={m.topBlock}>
                         <p className={m.title}>{props.title}</p>
-                        <p>{props.videosCount} видео</p>
+                        <p className={m.videosCount}>{props.videosCount} видео</p>
                     </div>
                     <div className={m.access}>
                         <p>{displayedStatus}</p>

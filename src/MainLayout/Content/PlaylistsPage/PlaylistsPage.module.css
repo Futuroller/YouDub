@@ -14,7 +14,6 @@
 }
 
 .videoContainer {
-
     display: flex;
     flex-wrap: wrap;
     width: 100%;
@@ -24,4 +23,22 @@
 
 .loadingData {
     color: white;
+}
+
+.addPlaylistButton {
+    height: 60px;
+    width: 60px;
+    padding: 20px;
+    border-radius: 100px;
+    align-self: center;
+    font-size: 40px;
+    display: flex;
+    background-color: rgb(26, 26, 26);
+    margin-left: 10px;
+}
+
+@media (max-width: 500px) {
+    .videoContainer {
+        justify-content: center;
+    }
 }

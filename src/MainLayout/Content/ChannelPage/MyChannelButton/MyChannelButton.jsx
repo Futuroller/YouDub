@@ -4,7 +4,7 @@ function MyChannelButton(props) {
     return (
         <button className={m.myChannelButton} onClick={props.OnClickHandler}>
             {props.icon ? <img src={props.icon} className={m.icon}></img> : ''}
-            {props.buttonText}
+            <span>{props.buttonText}</span>
         </button>
     );
 }

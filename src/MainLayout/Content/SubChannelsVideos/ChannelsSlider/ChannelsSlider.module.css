@@ -1,0 +1,58 @@
+.sliderWrapper {
+    position: relative;
+    background-color: #000;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.channelSlider {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding-bottom: 5px;
+    scrollbar-width: none;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.channelSlider::-webkit-scrollbar {
+    display: none;
+}
+
+.channel {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.channel:hover {
+    color: #ff9db8;
+}
+
+.channelImage {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.channelTitle {
+    white-space: nowrap;
+    font-size: 18px;
+}
+
+.arrow {
+    cursor: pointer;
+    font-size: 24px;
+    color: white;
+    padding-left: 10px;
+    user-select: none;
+}

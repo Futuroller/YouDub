@@ -2,10 +2,10 @@ import { fetchHistory, clearVideos, removeHistoryVideo, clearHistoryVideos } fro
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import WideVideo from '../WideVideo/WideVideo';
-import SideMenu from './SideMenu/SideMenu';
 import m from './ViewHistory.module.css'
 import { API_URL_FILES } from '../../../config';
 import { formatDateGroup } from '../../../utils/formatDateGroup';
+import MenuItem from '../../MenuItem/MenuItem';
 
 function ViewHistory(props) {
 
@@ -63,17 +63,29 @@ function ViewHistory(props) {
         ));
     };
 
+    const onDeleteHistory = async () => {
+        const answer = confirm('Вы уверены что хотите очистить историю?');
+        if (!answer) return;
+        const response = await apiRequest('/main/history', 'DELETE');
+        if (response.status !== 200) {
+            alert('Ошибка удаления истории просмотра');
+            return;
+        }
+        dispatch(clearHistoryVideos());
+    };
+
     if (isLoading) return <h1 className={m.loadingData}>Загрузка...</h1>;
     if (error) return <h1>Ошибка: {error}</h1>;
 
     return (
         <div className={m.container}>
             <p className={m.title}>История просмотра</p>
+            {watchHistory.length > 0 && <MenuItem key={1} picture='../images/basket.png' title='Очистить историю просмотра'
+                onClickHandler={onDeleteHistory} caption='Очистить историю просмотра' />}
             <div className={m.content}>
                 <div className={m.videos}>
                     {watchHistory.length > 0 ? renderGroupedVideos() : <p className={m.caprion}>История просмотра пуста</p>}
                 </div>
-                <SideMenu sideMenu={sideMenu} />
             </div>
         </div>
     );

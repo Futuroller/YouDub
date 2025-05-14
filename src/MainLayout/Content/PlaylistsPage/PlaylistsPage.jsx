@@ -1,9 +1,9 @@
 import { fetchAllPlaylists, clearPlaylists } from '../../../store/slices/playlistsSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { useState, useEffect } from 'react';
-import Video from '../Video/Video';
+import { useEffect } from 'react';
 import m from './PlaylistsPage.module.css'
 import Playlist from './Playlist/Playlist';
+import { NavLink } from 'react-router-dom';
 
 function PlaylistsPage() {
     const dispatch = useDispatch();
@@ -30,13 +30,22 @@ function PlaylistsPage() {
                         key={p.id}
                         title={p.name}
                         channelName={p.channelName}
-                        preview={p.name == 'Понравившиеся' ? '../../../../images/like.png' : p.name == 'Смотреть позже' ? '../../../../images/watchLaterIcon.png' : '../../../../images/playlistIcon.png'}
+                        preview={p.name == 'Понравившиеся' ?
+                            '../../../../images/like.png' :
+                            p.name == 'Смотреть позже' ?
+                                '../../../../images/watchLaterIcon.png' :
+                                '../../../../images/playlistIcon.png'}
                         channelImage={p.channelImage}
                         access_status={p.access_status}
                         url={p.url}
                         videosCount={p.videosCount}
+                        canEdit={!p.isDefault}
                     />
                 ))}
+                <NavLink to={'/main/my-channel/add-playlist'}
+                    className={m.addPlaylistButton} title='Создать плейлист'>
+                    <img src='../images/plus.png' />
+                </NavLink>
             </div>
         </div>
     );

@@ -1,7 +1,8 @@
 .container {
     height: 280px;
-    width: 30%;
-    min-width: 400px;
+    width: 80%;
+    max-width: 350px;
+    min-width: 300px;
     margin: 1%;
     background-color: #22222275;
     display: flex;
@@ -12,16 +13,28 @@
 .previewContainer {
     width: 100%;
     min-height: 200px;
-    border-radius: 15px;
+    border-radius: 15px 15px 0 0;
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: #050505;
+    position: relative;
+    border: 1px solid #202020;
 }
 
 .preview {
     width: 30%;
     object-fit: cover;
+}
+
+.editButton {
+    position: absolute;
+    top: 0;
+    right: 0px;
+    width: 40px;
+    height: 40px;
+    align-self: center;
+    cursor: pointer;
 }
 
 .underPreview {
@@ -44,7 +57,6 @@
 .videoDescription p {
     margin: 0px;
     margin-left: 10px;
-    text-wrap: nowrap;
 }
 
 .channelImage {
@@ -61,7 +73,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 280px;
+    max-width: 80%;
 }
 
 .topBlock {
@@ -79,4 +91,8 @@
     font-size: 14px;
     color: #CBCBCB;
     font-weight: lighter;
+}
+
+.videosCount {
+    text-wrap: nowrap;
 }

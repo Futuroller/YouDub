@@ -43,7 +43,9 @@ function VideoPage(props) {
     useEffect(() => {
         let interval;
         if (isPlayerReady && typeof progressPercent === 'number') {
-            playerRef.current.seekTo(progressPercent / 100, 'fraction');
+            const shouldStartFromBeginning = progressPercent > 95;
+
+            playerRef.current.seekTo(shouldStartFromBeginning ? 0 : progressPercent / 100, 'fraction');
 
             interval = setInterval(async () => {
                 const currentProgress = playerRef.current.getCurrentTime();
@@ -156,7 +158,9 @@ function VideoPage(props) {
                 <div className={m.leftSide}>
                     <ChannelInfo username={username} tagname={tagname}
                         subscribers={ownerSubscribersCount} avatar={avatar_url} />
-                    {id_owner !== user.id ? <SubButton channelTagname={tagname} isUserFollowed={currentVideo.isFollowed} /> : ''}
+                    {id_owner !== user.id ?
+                        <SubButton channelTagname={tagname} isUserFollowed={currentVideo.isFollowed} /> :
+                        ''}
                 </div>
                 <div className={m.rightSide}>
                     <LikePanel likes={likes} dislikes={dislikes} videoUrl={url} reactionId={reactionForCurrentVideo} />

@@ -4,7 +4,7 @@ function ComboBox(props) {
     return (
         <div className={m.container}>
             <p className={m.title}>{props.title}</p>
-            <select onChange={(e) => props.onChange(props.options.find(opt => opt.id == e.target.value))}>
+            <select value={props.selectedValue} onChange={(e) => props.onChange(props.options.find(opt => opt.id == e.target.value))}>
                 <option value="" >-- Выберите --</option>
                 {props.options.map((item) => (
                     <option key={item.id} value={item.id}>

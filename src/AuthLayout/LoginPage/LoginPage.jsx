@@ -51,8 +51,13 @@ function LoginPage(props) {
                 const { token, user } = response;
 
                 if (user.is__activated) {
-                    localStorage.setItem('token', token);
-                    navigate('/main/mainpage');
+                    if (!user.is_banned) {
+                        localStorage.setItem('token', token);
+                        navigate('/main/mainpage');
+                    } else {
+                        alert(`Ваш аккаунт заблокирован по причине: ${user.ban_reason}`);
+                        return;
+                    }
                 } else {
                     alert('Автивируйте аккаунт через ваш email');
                     return;

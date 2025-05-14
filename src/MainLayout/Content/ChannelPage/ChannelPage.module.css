@@ -13,19 +13,25 @@
     width: 75%;
 }
 
+.videosContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 100%;
+    margin-bottom: 40px;
+}
+
 .videos {
     display: flex;
-    flex-direction: row;
     flex-wrap: wrap;
-    width: 100%;
-    margin: 0 auto;
     justify-content: flex-start;
+    margin: 0 auto;
     transition: max-width 0.3s ease;
-
+    width: 100%;
 }
 
 .narrow {
-    max-width: 77%;
+    max-width: 70%;
 }
 
 .expanded {

@@ -108,6 +108,9 @@ const videosSlice = createSlice({
         clearSearchVideos: (state) => {
           state.searchVideos = [];
         },
+        clearVideoByUrl: (state, action) => {
+          state.allVideos = state.allVideos.filter(video => video.url !== action.payload);
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -243,7 +246,7 @@ const videosSlice = createSlice({
       }
     });
 
-export const { clearVideos, clearPlaylist, clearHistoryVideos, removeHistoryVideo, clearChannelVideos, clearCurrentVideo, clearVideosFromSubChannel, clearSearchVideos } = videosSlice.actions;
+export const { clearVideos, clearPlaylist, clearHistoryVideos, removeHistoryVideo, clearChannelVideos, clearCurrentVideo, clearVideosFromSubChannel, clearSearchVideos, clearVideoByUrl } = videosSlice.actions;
 
 export default videosSlice.reducer;
     

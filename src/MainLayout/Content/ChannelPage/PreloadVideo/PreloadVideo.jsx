@@ -1,9 +1,9 @@
-import getTimeline from '../../../../../utils/getTimeline';
-import setWordEnding from '../../../../../utils/setWordEnding';
-import passPartOfText from '../../../../../utils/passPartOfText';
-import getMeasurementUnit from '../../../../../utils/getMeasurementUnit';
+import getTimeline from '../../../../utils/getTimeline';
+import setWordEnding from '../../../../utils/setWordEnding';
+import passPartOfText from '../../../../utils/passPartOfText';
+import getMeasurementUnit from '../../../../utils/getMeasurementUnit';
 import m from './PreloadVideo.module.css'
-import { API_URL_FILES } from '../../../../../config';
+import { API_URL_FILES } from '../../../../config';
 
 function PreloadVideo(props) {
     let description = props.description ? `◆ ${props.description}` : '';

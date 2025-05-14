@@ -26,8 +26,12 @@ function SubButton({ channelTagname, isUserFollowed }) {
 
     return (
         <button className={m.subButton} onClick={onSubClick}>
-            <img src={isFollowed ? '../../../../images/unfollow.png' : '../../../../images/follow.png'} />
-            {isFollowed ? 'Отписаться' : 'Подписаться'}
+            <img src={isFollowed ?
+                '../../../../images/unfollow.png' :
+                '../../../../images/follow.png'} />
+            {isFollowed ?
+                <span>Отписаться</span> :
+                <span>Подписаться</span>}
         </button>
     );
 }

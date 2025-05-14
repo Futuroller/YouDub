@@ -4,6 +4,9 @@
     display: flex;
     flex-direction: column;
     border-radius: 15px;
+    position: relative;
+    transition: 0.2s ease;
+
 }
 
 .narrow {
@@ -24,6 +27,15 @@
     max-height: 75%;
     object-fit: cover;
     border-radius: 15px 15px 0 0;
+}
+
+.editButton {
+    position: absolute;
+    right: 0px;
+    width: 35px;
+    height: 35px;
+    align-self: center;
+    cursor: pointer;
 }
 
 .progressBar {
@@ -95,4 +107,12 @@
     font-size: 14px;
     color: #CBCBCB;
     font-weight: lighter;
+}
+
+@media (max-width: 485px) {
+    .container {
+        min-width: 350px;
+        height: 280px;
+        transition: 0.2s ease;
+    }
 }

@@ -60,11 +60,11 @@ function AddPlaylist(props) {
                 />
             </div>
             <div className={m.otherInfoContainer}>
-                <div>
+                <div className={m.textField}>
                     <p className={m.title}>Название</p>
                     <input type='text' className={m.name} value={playlistName} onChange={(e) => setPlaylistName(e.target.value)} maxLength={60}></input>
                 </div>
-                <div>
+                <div className={m.textField}>
                     <p className={m.title}>Описание</p>
                     <textarea className={m.description} value={playlistDescription} onChange={(e) => setPlaylistDescription(e.target.value)}></textarea>
                 </div>
@@ -80,11 +80,11 @@ function AddPlaylist(props) {
                     </label>
                 </fieldset>
                 <div className={m.changeButtons}>
-                    <button className={m.headerButton} onClick={onSaveClick}>Создать</button>
                     <button className={m.headerButton} onClick={onCancelClick}>Отменить</button>
+                    <button className={m.headerButton} onClick={onSaveClick}>Создать</button>
                 </div>
             </div>
-        </div >
+        </div>
     );
 }
 

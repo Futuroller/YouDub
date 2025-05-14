@@ -73,9 +73,9 @@ function Channel() {
             <div className={m.container} ref={buttonRef} onClick={() => setIsOpen(!isOpen)}>
                 <img src={user.avatar_url ? `${API_URL_FILES}/avatars/${user.avatar_url}` : '../../../images/userDefault.png'} className={m.channelImage}></img>
                 <p className={m.channelTitle}>{user.username}</p>
-            </div>
-            <div className={m.menuContainer} ref={menuRef}>
-                {isOpen && <DropdownMenu menuItems={menuItems} />}
+                <div className={m.menuContainer} ref={menuRef}>
+                    {isOpen && <DropdownMenu menuItems={menuItems} left={'-270px'} top={'50px'} />}
+                </div>
             </div>
         </div>
     );

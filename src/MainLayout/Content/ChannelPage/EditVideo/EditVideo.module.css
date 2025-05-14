@@ -1,0 +1,268 @@
+.container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.videoContainer {
+    width: 700px;
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.videoSubContainer {
+    position: relative;
+    height: 169px;
+    width: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.video {
+    width: 300px;
+    height: 169px;
+    border-radius: 15px;
+    object-fit: cover;
+}
+
+.edit {
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    z-index: 2;
+}
+
+.videoSubContainer::before {
+    content: '';
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+    display: block;
+    position: absolute;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.fileSelect {
+    cursor: pointer;
+    display: block;
+    position: absolute;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+}
+
+.trashboxContainer {
+    margin-top: 20px;
+    width: 70px;
+    height: 70px;
+    border-radius: 50px;
+    background-color: #333333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.trashbox {
+    width: 60%;
+}
+
+.otherInfoContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.otherInfoContainer input,
+textarea {
+    color: white;
+}
+
+.title {
+    font-size: 32px;
+    margin-bottom: 10px;
+    font-weight: 700;
+    color: white;
+}
+
+.textField {
+    width: 100%;
+}
+
+.name {
+    height: 30px;
+    width: 50%;
+    border-radius: 20px;
+    font-size: 16px;
+    padding-left: 10px;
+}
+
+
+.description {
+    height: 80px;
+    width: 65%;
+    border-radius: 20px;
+    font-size: 16px;
+    padding: 10px;
+}
+
+.headerContainer {
+    width: 600px;
+    height: 225px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.headerSubContainer {
+    position: relative;
+    width: 480px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.headerSubContainer::before {
+    content: '';
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    display: block;
+    position: absolute;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.header {
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    object-fit: cover;
+}
+
+.headerPreview {
+    width: 100%;
+    height: 100%;
+    background-color: rgb(37, 37, 37);
+    border-radius: 20px;
+}
+
+.caption {
+    margin: 0;
+}
+
+.headerButtonsContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.headerButton {
+    margin: 15px;
+    margin-bottom: 30px;
+    text-wrap: nowrap;
+}
+
+.changeButtons {
+    width: 300px;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    align-self: flex-end;
+    margin-right: 10%;
+}
+
+.otherInfoContainer fieldset {
+    margin-top: 40px;
+}
+
+input[type="radio"] {
+    accent-color: #ff0149;
+    width: 25px;
+    height: 17px;
+}
+
+.radio {
+    font-size: 20px;
+}
+
+.tagsPreview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.tag {
+    background-color: #efefef;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 14px;
+    color: #333;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.tag:hover {
+    background-color: #e0e0e0;
+}
+
+@media (max-width: 1050px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .videoContainer {
+        width: fit-content;
+    }
+
+    .headerSubContainer {
+        width: 240px;
+        height: 112px;
+    }
+}
+
+@media (max-width: 800px) {
+    .headerContainer {
+        flex-direction: column;
+    }
+
+    .headerContainer {
+        width: unset;
+    }
+
+    .headerSubContainer {
+        width: 200px;
+        height: 100px;
+    }
+
+    .trashboxContainer {
+        margin-top: 20px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50px;
+        background-color: #333333;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .trashbox {
+        width: 60%;
+    }
+
+    .headerButton {
+        font-size: 15px;
+    }
+}

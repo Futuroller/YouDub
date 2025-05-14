@@ -27,6 +27,11 @@
     align-items: center;
 }
 
+.nameAndStats h2 {
+    max-width: 80%;
+    font-size: 26px;
+}
+
 .stats {
     display: flex;
     justify-content: space-between;
@@ -126,4 +131,11 @@
 
 .menuContainer {
     position: relative;
+}
+
+@media (max-width: 450px) {
+    .rightSide {
+        flex-direction: column;
+        gap: 10px;
+    }
 }

@@ -1,12 +1,10 @@
 import MenuItem from '../../../MenuItem/MenuItem';
-import Search from '../../../Search/Search';
-import { NavLink } from 'react-router-dom';
-import m from './SideMenu.module.css'
+import m from './ClearHistory.module.css'
 import apiRequest from '../../../../api/apiRequest';
 import { useDispatch } from 'react-redux';
 import { clearHistoryVideos } from '../../../../store/slices/videosSlice';
 
-function SideMenu(props) {
+function ClearHistory(props) {
     const dispatch = useDispatch();
 
     const onDeleteHistory = async () => {
@@ -25,12 +23,10 @@ function SideMenu(props) {
     ));
 
     return (
-        <div className={m.container}>
-            <div className={m.menuItems}>
-                {sideMenuItems}
-            </div>
+        <div className={m.menuItems}>
+            {sideMenuItems}
         </div>
     );
 }
 
-export default SideMenu;
+export default ClearHistory;

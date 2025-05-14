@@ -7,6 +7,7 @@ import m from './WideVideo.module.css'
 import { NavLink } from 'react-router-dom';
 import getMeasurementUnit from '../../../utils/getMeasurementUnit';
 import setWordEnding from '../../../utils/setWordEnding';
+import passPartOfText from '../../../utils/passPartOfText';
 
 function WideVideo(props) {
 
@@ -59,37 +60,22 @@ function WideVideo(props) {
         }
     };
 
-    const handleMore = async (e, videoId) => {
-        try {
-            () => setIsOpen(!isOpen)
-            e.stopPropagation();
-            e.preventDefault();
-        } catch (error) {
-            console.error("Ошибка" + error);
-        }
-    };
-
     return (
         <NavLink to={`/main/video/${props.url}`} className={m.container} onClick={onVideoClick}>
             <img src={props.preview} className={m.preview}></img>
 
             <div className={m.videoInfo}>
                 <div className={m.subContainer}>
-                    <p className={m.title}>{props.title}</p>
+                    <p className={m.title}>{passPartOfText(props.title, 40)}</p>
                     <div className={m.nameViews}>
                         <p>{props.channelName}</p>
                         <p>{setWordEnding(getMeasurementUnit(props.views), 'просмотр', '', 'а', 'ов')}</p>
                     </div>
                 </div>
-                <p className={m.description}>{props.description}</p>
+                <p className={m.description}>{passPartOfText(props.description, 120)}</p>
             </div>
             <div className={m.buttons}>
                 <button className={m.deleteButton} onClick={(e) => handleDelete(e, props.id)}></button>
-                <button
-                    ref={buttonRef}
-                    className={m.moreButton}
-                    onClick={(e) => handleMore(e, props.id)}
-                />
             </div>
             <div className={m.menuContainer} ref={menuRef}>
                 {isOpen && <DropdownMenu menuItems={menuItems} top="50px" left="-250px" />}

@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import passPartOfText from '../../../../utils/passPartOfText';
 import setWordEnding from '../../../../utils/setWordEnding';
 import m from './ChannelModal.module.css'
+import ShowMore from '../../ShowMore/ShowMore';
 
 function ChannelModal({ channel, onCloseClick }) {
     const date = new Date(channel.registration_date);
@@ -12,13 +12,11 @@ function ChannelModal({ channel, onCloseClick }) {
         year: 'numeric',
     });
 
-    const [isDescriptionFull, setIsDescriptionFull] = useState(false);
-    const [isDescriptionLong, setIsDescriptionLong] = useState(channel.description?.length > 70 ? true : false);
-    const [isDescription, setIsDescription] = useState(channel.description ? true : false);
+    const [isFull, setIsFull] = useState(false);
 
     return (
         <div className={m.overlay} onClick={onCloseClick}>
-            <div className={m.container} style={{ width: isDescriptionFull ? '500px' : '400px' }}
+            <div className={m.container} style={{ width: isFull ? '500px' : '400px' }}
                 onClick={(e) => e.stopPropagation()}>
                 <div className={m.topSide}>
                     <h2 className={m.title}>{channel.username}</h2>
@@ -26,14 +24,7 @@ function ChannelModal({ channel, onCloseClick }) {
                 </div>
                 <div className={m.block}>
                     <h2>Описание</h2>
-                    <p className={m.fieldText}>{isDescription ? isDescriptionFull ?
-                        channel.description :
-                        passPartOfText(channel.description, 70) :
-                        <p className={m.fieldText}>Нет описания</p>}</p>
-                    {isDescriptionLong ? isDescriptionFull ?
-                        <p className={m.showMore} onClick={() => setIsDescriptionFull(false)}>свернуть...</p> :
-                        <p className={m.showMore} onClick={() => setIsDescriptionFull(true)}>показать ещё...</p> :
-                        ''}
+                    <ShowMore description={channel.description} onMoreClick={() => setIsFull(!isFull)} />
                 </div>
                 <div className={m.block}>
                     <h2>Информация</h2>

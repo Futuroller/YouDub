@@ -10,6 +10,7 @@ function SearchResultsPage({ contentRef }) {
     const location = useLocation();
     const dispatch = useDispatch();
     const [query, setQuery] = useState(new URLSearchParams(location.search).get('query') || '');
+    const user = useSelector(state => state.user);
 
     const { searchVideos, searchStatus } = useSelector(state => state.videos);
     const isCollapsed = useSelector(state => state.ui.isNavbarCollapsed);
@@ -70,7 +71,7 @@ function SearchResultsPage({ contentRef }) {
         <Video key={v.id} title={v.name} description={v.description} channelName={v.owner_username}
             preview={v.preview_url ? `${API_URL_FILES}previews/${v.preview_url}` : '../../../images/preview.jpg'}
             channelImage={v.owner_channel_image} url={v.url}
-            views={v.views} loadDate={v.load_date} />
+            views={v.views} loadDate={v.load_date} idUserRole={user.id_role} />
     ));
 
     return (

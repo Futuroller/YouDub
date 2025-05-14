@@ -7,7 +7,6 @@
     background-color: #222222;
     width: 75%;
     height: 330px;
-    min-width: 1000px;
     border-radius: 20px;
     background-size: cover;
     background-position: center;
@@ -46,9 +45,9 @@
 .channelImage {
     width: 150px;
     height: 150px;
-    border-radius: 50%;
+    border-radius: 100px;
     object-fit: cover;
-    margin-left: 50px;
+    margin-left: 2%;
 }
 
 .channelInfo {
@@ -57,7 +56,8 @@
     justify-content: space-around;
     height: 130px;
     margin-left: 25px;
-    width: clamp(850px, 55%, 1000px)
+    width: clamp(850px, 55%, 1000px);
+    max-width: 100%;
 }
 
 .channelInfo p {
@@ -80,6 +80,7 @@
     display: flex;
     justify-content: space-between;
     text-wrap: nowrap;
+    flex-wrap: wrap;
 }
 
 .aboutChannel {
@@ -91,6 +92,11 @@
 .description {
     font-weight: bold;
     text-wrap: nowrap;
+    min-height: fit-content;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
 }
 
 .buttonContainer {
@@ -105,4 +111,33 @@
 .subContainer button {
     width: 50%;
     border: 1px solid #FF0149;
+}
+
+@media (max-width: 1100px) {
+    .container {
+        height: 250px;
+    }
+
+    .channelImage {
+        width: 100px;
+        height: 100px;
+    }
+
+    .tagAndStat {
+        font-size: 15px;
+    }
+
+    .channelName {
+        font-size: 25px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        min-width: 98%;
+    }
+
+    .tagAndStat :last-child {
+        display: none;
+    }
 }

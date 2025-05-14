@@ -7,15 +7,16 @@ import apiRequest from '../../../../api/apiRequest';
 import CategoriesModal from '../../../../AuthLayout/CategoriesModal/CategoriesModal';
 import { fetchUsersCategories } from '../../../../store/slices/categoriesSlice';
 import { areArraysEqual } from '../../../../utils/areArraysEqual';
+import { fetchVideos } from '../../../../store/slices/videosSlice';
 
 function EditChannel(props) {
     const user = useSelector((state) => state.user);
     const dispatch = useDispatch();
-    const [channelName, setChannelName] = useState(user.username);
-    const [channelDescription, setChannelDescription] = useState(user.description);
-    const [avatarPreview, setAvatarPreview] = useState(user.avatar_url ? `${API_URL_FILES}/avatars/${user.avatar_url}` : '../../../../images/userDefault.png');
+    const [channelName, setChannelName] = useState('');
+    const [channelDescription, setChannelDescription] = useState('');
+    const [avatarPreview, setAvatarPreview] = useState('');
     const [avatar, setAvatar] = useState(`${API_URL_FILES}/avatars/${user.avatar_url}`);
-    const [headerPreview, setHeaderPreview] = useState(user.channel_header_url ? `${API_URL_FILES}/headers/${user.channel_header_url}` : '../../../../images/channelHeader.jpg');
+    const [headerPreview, setHeaderPreview] = useState('');
     const [header, setHeader] = useState(`${API_URL_FILES}/headers/${user.channel_header_url}`);
     const { usersCategories } = useSelector(state => state.categories);
     const [selectedCategories, setSelectedCategories] = useState([]);
@@ -24,7 +25,7 @@ function EditChannel(props) {
     useEffect(() => {
         if (user) {
             setChannelName(user.username);
-            setChannelDescription(user.description);
+            setChannelDescription(user.description || '');
             setAvatarPreview(user.avatar_url ? `${API_URL_FILES}/avatars/${user.avatar_url}` : '../../../../images/userDefault.png');
             setAvatar(null);
             setHeaderPreview(user.channel_header_url ? `${API_URL_FILES}/headers/${user.channel_header_url}` : '../../../../images/channelHeader.jpg');
@@ -79,6 +80,7 @@ function EditChannel(props) {
         if (!areArraysEqual(usersCategories.map(c => c.id), selectedCategories.map(c => c.id))) {
             if (selectedCategories.length >= 3) {
                 updatedFields.categories = JSON.stringify(selectedCategories);
+                dispatch(fetchVideos({ page: 1, limit: 12 }));
             } else {
                 alert('Выберите как минимум 3 любимые категории');
                 return;
@@ -142,7 +144,7 @@ function EditChannel(props) {
             <div className={m.avatarContainer}>
                 <div className={m.avatarSubContainer}>
                     <input type='file' accept='.png,.jpeg,.jpg' hidden onChange={(e) => onImageChange(e, 'avatar')} className={m.fileSelect}></input>
-                    <img src={avatarPreview} className={m.avatar}></img>
+                    <img src={avatarPreview || null} className={m.avatar}></img>
                     <img src={'../../images/edit.png'} className={m.edit}></img>
                 </div>
                 <div className={m.trashboxContainer} onClick={() => onDeleteImage('avatar')}>
@@ -150,11 +152,11 @@ function EditChannel(props) {
                 </div>
             </div>
             <div className={m.otherInfoContainer}>
-                <div>
+                <div className={m.textField}>
                     <p className={m.title}>Название канала</p>
                     <input type='text' className={m.name} value={channelName} onChange={onNameChange} maxLength='30'></input>
                 </div>
-                <div>
+                <div className={m.textField}>
                     <p className={m.title}>Описание канала</p>
                     <textarea className={m.description} value={channelDescription} onChange={onDescriptionChange} maxLength='700'></textarea>
                 </div>
@@ -164,7 +166,7 @@ function EditChannel(props) {
                     <div className={m.headerContainer}>
                         <div className={m.headerSubContainer}>
                             <input type='file' accept='.png,.jpeg,.jpg' hidden onChange={(e) => onImageChange(e, 'header')} className={m.fileSelect}></input>
-                            <img src={headerPreview} className={m.header}></img>
+                            <img src={headerPreview || null} className={m.header}></img>
                             <img src={'../../images/edit.png'} className={m.edit}></img>
                         </div>
                         <div className={m.trashboxContainer} style={{ marginLeft: '20px' }} onClick={() => onDeleteImage('header')}>

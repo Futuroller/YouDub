@@ -16,7 +16,6 @@ function MainLayout() {
     const [isLoading, setIsLoading] = useState(false);
     const [token, setToken] = useState(localStorage.getItem('token'));
 
-
     useEffect(() => {
         if (!token) {
             console.log('Токен отсутствует. Пользователь не авторизован.');
@@ -31,7 +30,6 @@ function MainLayout() {
             try {
                 setIsLoading(true);
                 const response = await apiRequest('/main', 'GET'); // Запрос к серверу для получения данных пользователя
-
                 if (response.status === 200) {
                     dispatch(setUser(response)); // Обновляем состояние Redux
                     setIsFetched(true);
@@ -56,7 +54,7 @@ function MainLayout() {
             <Header />
             <div className={m.container}>
                 <Navbar />
-                <Content content={store.content} />
+                <Content />
                 <Outlet />
             </div>
         </div>

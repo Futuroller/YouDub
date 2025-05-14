@@ -1,8 +1,7 @@
 .container {
     height: 280px;
-    width: 27%;
+    max-width: 20%;
     min-width: 400px;
-    max-width: 500px;
     margin: 1%;
     background-color: #22222275;
     display: flex;
@@ -82,4 +81,12 @@
     font-size: 14px;
     color: #CBCBCB;
     font-weight: lighter;
+}
+
+@media (max-width: 485px) {
+    .container {
+        min-width: 350px;
+        height: 280px;
+        transition: 0.2s ease;
+    }
 }

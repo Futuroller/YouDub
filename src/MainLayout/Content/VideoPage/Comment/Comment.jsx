@@ -34,7 +34,10 @@ function Comment(props) {
                         <h3 className={m.channelName}>{props.ownerName}</h3>
                         <p className={m.timeAgo}>{getTimeline(props.commentDate)}</p>
                     </div>
-                    {(isUserOwner || isUserCommentator) ? <button className={m.deleteButton} title='Удалить комментарий' onClick={(e) => handleDelete(e, props.id)}></button> : ''}
+                    {(isUserOwner || isUserCommentator) ?
+                        <button className={m.deleteButton} title='Удалить комментарий'
+                            onClick={(e) => handleDelete(e, props.id)}></button> :
+                        ''}
                 </div>
                 <p className={m.text}>{props.text}</p>
                 <CommentLikePanel commentId={props.id} likes={props.likes} dislikes={props.dislikes} height='40px' currentReaction={props.currentReaction} />

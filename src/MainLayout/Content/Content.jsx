@@ -13,6 +13,8 @@ import SubChannelsVideos from './SubChannelsVideos/SubChannelsVideos';
 import SearchResultsPage from './SearchResultsPage/SearchResultsPage';
 import m from './Content.module.css';
 import AddPlaylist from './ChannelPage/AddPlaylist/AddPlaylist';
+import EditVideo from './ChannelPage/EditVideo/EditVideo';
+import EditPlaylist from './ChannelPage/EditPlaylist/EditPlaylist';
 
 function Content(props) {
     const contentRef = useRef();
@@ -32,6 +34,8 @@ function Content(props) {
                 <Route path='playlists/' element={<PlaylistsPage />} />
                 <Route path='playlists/*' element={<PlaylistVideos />} />
                 <Route path='video/*' element={<VideoPage />} />
+                <Route path='edit-video/*' element={<EditVideo />} />
+                <Route path='edit-playlist/*' element={<EditPlaylist />} />
             </Routes>
         </div>
     );

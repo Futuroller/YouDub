@@ -3,6 +3,7 @@
     color: white;
     font-size: smaller;
     max-width: fit-content;
+    min-width: fit-content;
     height: 40px;
     display: flex;
     justify-content: space-between;
@@ -16,4 +17,33 @@
 .subButton img {
     height: 25px;
     margin-right: 10px;
+}
+
+@media (max-width: 1100px) {
+    .subButton {
+        font-size: 14px;
+    }
+
+    .subButton img {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+@media (max-width: 740px) {
+    .subButton span {
+        display: none;
+    }
+
+    .subButton {
+        height: 40px;
+        width: 40px;
+        border-radius: 100px;
+        justify-content: center;
+        min-width: none;
+    }
+
+    .subButton img {
+        margin: 0;
+    }
 }

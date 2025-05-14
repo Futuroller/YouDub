@@ -83,7 +83,7 @@ function Navbar(props) {
             </ol>
             <div className={m.line}></div>
             <ol>
-                {followChannelsItems}
+                {followChannelsItems.slice(0, 5)}
             </ol>
         </div>
     );

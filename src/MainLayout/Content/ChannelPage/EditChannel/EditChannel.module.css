@@ -79,6 +79,10 @@
     align-items: flex-start;
 }
 
+.textField {
+    width: 100%;
+}
+
 .title {
     font-size: 32px;
     margin-bottom: 10px;
@@ -88,7 +92,7 @@
 
 .name {
     height: 30px;
-    width: 600px;
+    width: 50%;
     border-radius: 20px;
     font-size: 16px;
     padding-left: 10px;
@@ -96,7 +100,7 @@
 
 .description {
     height: 80px;
-    width: 600px;
+    width: 65%;
     border-radius: 20px;
     font-size: 16px;
     padding: 10px;
@@ -191,4 +195,26 @@
     align-items: flex-end;
     align-self: flex-end;
     margin-right: 10%;
+}
+
+@media (max-width: 1100px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .headerSubContainer {
+        width: 500px;
+        height: 133px;
+    }
+}
+
+@media (max-width: 800px) {
+    .headerContainer {
+        flex-direction: column;
+    }
+
+    .headerSubContainer {
+        width: 350px;
+        height: 93px;
+    }
 }

@@ -8,7 +8,7 @@
     align-items: center;
     transition: ease 0.35s;
 
-    @media (max-width: 550px) {
+    @media (max-width: 650px) {
         transition: ease 0.35s;
         width: 70px;
     }
