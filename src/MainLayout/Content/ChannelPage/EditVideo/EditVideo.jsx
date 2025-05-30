@@ -120,6 +120,7 @@ function EditVideo(props) {
 
             if (response.status === 200) {
                 alert('Изменения внесены');
+                navigate(-1);
             } else {
                 alert(`Ошибка внесения изменений`);
                 console.error(`${response.message || 'Неизвестная ошибка'}`);

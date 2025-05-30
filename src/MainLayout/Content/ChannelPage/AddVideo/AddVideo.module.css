@@ -11,6 +11,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+    transition: 0.5s ease;
 }
 
 .videoSubContainer {
@@ -251,6 +252,12 @@ input[type="radio"] {
         justify-content: center;
         align-items: center;
         cursor: pointer;
+    }
+
+    .videoContainer {
+        max-width: 350px;
+        align-items: flex-start;
+        transition: 0.5s ease;
     }
 
     .trashbox {

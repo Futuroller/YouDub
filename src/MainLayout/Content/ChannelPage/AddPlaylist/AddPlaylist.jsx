@@ -3,9 +3,11 @@ import { useState } from 'react';
 import m from './AddPlaylist.module.css';
 import apiRequest from '../../../../api/apiRequest';
 import PreloadPlaylist from './PreloadPlaylist/PreloadPlaylist';
+import { useNavigate } from 'react-router-dom';
 
 function AddPlaylist(props) {
     const user = useSelector((state) => state.user);
+    const navigate = useNavigate();
     const [playlistName, setPlaylistName] = useState('');
     const [playlistDescription, setPlaylistDescription] = useState('');
     const [playlistAccess, setPlaylistAccess] = useState(1);
@@ -37,6 +39,7 @@ function AddPlaylist(props) {
 
             if (response.status === 200) {
                 alert('Плейлист создан');
+                navigate(-1);
             } else if (response.status === 206) {
                 alert(response.message);
             } else {

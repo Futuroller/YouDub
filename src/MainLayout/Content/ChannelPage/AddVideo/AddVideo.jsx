@@ -6,8 +6,11 @@ import passPartOfText from '../../../../utils/passPartOfText';
 import ComboBox from '../ComboBox/ComboBox';
 import ReactPlayer from 'react-player';
 import PreloadVideo from '../PreloadVideo/PreloadVideo';
+import { useNavigate } from 'react-router-dom';
 
 function AddVideo(props) {
+    const navigate = useNavigate();
+
     const user = useSelector((state) => state.user);
     const [video, setVideo] = useState();
     const [videoPreviewUrl, setVideoPreviewUrl] = useState(null);
@@ -120,6 +123,8 @@ function AddVideo(props) {
 
             if (response.status === 200) {
                 alert('Видео успешно загружено');
+                navigate(-1);
+
             } else {
                 alert(`Ошибка загрузки видео`);
                 console.error(`${response.message || 'Неизвестная ошибка'}`);
@@ -211,8 +216,8 @@ function AddVideo(props) {
                     </label>
                 </fieldset>
                 <div className={m.changeButtons}>
-                    <button className={m.headerButton} onClick={onSaveClick}>Опубликовать</button>
                     <button className={m.headerButton} onClick={onCancelClick}>Отменить</button>
+                    <button className={m.headerButton} onClick={onSaveClick}>Опубликовать</button>
                 </div>
             </div>
         </div >

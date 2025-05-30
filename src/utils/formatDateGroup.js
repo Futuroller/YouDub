@@ -14,7 +14,7 @@ export const formatDateGroup = (dateString) => {
 
     const yesterday = new Date(today);
     yesterday.setDate(today.getDate() - 1);
-    if (isSameDay(date, yesterday)) return 'Вчераааааааааа';
+    if (isSameDay(date, yesterday)) return 'Вчера';
 
     const twoDaysAgo = new Date(today);
     twoDaysAgo.setDate(today.getDate() - 2);

@@ -48,6 +48,8 @@ function SubChannelsVideos(props) {
             views={v.views} loadDate={v.load_date} idUserRole={user.id_role} />)
     );
 
+    console.log(subscriptions.map(s => s.views));
+
     return (
         <div className={m.container}>
             <p className={m.title}>Подписки</p>

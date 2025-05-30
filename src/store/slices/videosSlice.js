@@ -52,6 +52,7 @@ export const fetchVideosFromSubChannels = createAsyncThunk(
   'videos/fetchVideosFromSubChannels',
   async ({ page, limit }) => {
     const response = await apiRequest(`/main/videos/channels`, 'POST', { page, limit });
+      console.log(response.videos);
     return response.videos;
 }
 );

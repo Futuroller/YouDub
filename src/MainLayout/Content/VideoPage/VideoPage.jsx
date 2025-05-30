@@ -170,7 +170,7 @@ function VideoPage(props) {
                             <img src='../../../../images/plus.png' className={m.plus} />
                         </div>
                         <div className={m.menuContainer} ref={menuRef}>
-                            {isOpen && <DropdownMenu menuItems={menuItems} top={'-280px'} left={'-150px'} />}
+                            {isOpen && <DropdownMenu menuItems={menuItems} top={'-190px'} left={'-150px'} />}
                         </div>
                     </div>
                 </div>
