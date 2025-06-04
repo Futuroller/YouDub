@@ -28,14 +28,12 @@ function AddPlaylist(props) {
             description: playlistDescription || null,
             id_access: playlistAccess,
         };
-        console.log(body)
 
         try {
             const answer = confirm('Вы уверены, что хотите создать плейлист?');
             if (!answer) return;
 
             const response = await apiRequest('/main/playlist', 'POST', body);
-            console.log(response)
 
             if (response.status === 200) {
                 alert('Плейлист создан');

@@ -123,7 +123,6 @@ function EditChannel(props) {
             const response = await apiRequest(`/main/user/configure`, 'DELETE', data);
             if (response.status == 200) {
                 dispatch(setUser(response));
-                console.log(response)
                 alert('Изображение удалёно');
             } else {
                 console.log(`Ошибка: ${response.message}`);

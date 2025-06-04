@@ -6,6 +6,7 @@ import CommentLikePanel from './CommentLikePanel/CommentLikePanel';
 import { useState } from 'react';
 import { removeComment } from '../../../../store/slices/commentsSlice';
 import apiRequest from '../../../../api/apiRequest';
+import { NavLink } from 'react-router-dom';
 
 function Comment(props) {
     const dispatch = useDispatch();
@@ -27,14 +28,16 @@ function Comment(props) {
 
     return (
         <div className={m.container}>
-            <img src={props.avatar ? `${API_URL_FILES}avatars/${props.avatar}` : '../../../images/userDefault.png'} className={m.channelImage}></img>
+            <NavLink to={`/main/channel/${props.tagname}`}>
+                <img src={props.avatar ? `${API_URL_FILES}avatars/${props.avatar}` : '../../../images/userDefault.png'} className={m.channelImage} />
+            </NavLink>
             <div className={m.comment}>
                 <div className={m.topSide}>
                     <div className={m.subContainer}>
-                        <h3 className={m.channelName}>{props.ownerName}</h3>
+                        <NavLink to={`/main/channel/${props.tagname}`}><h3 className={m.channelName}>{props.ownerName}</h3></NavLink>
                         <p className={m.timeAgo}>{getTimeline(props.commentDate)}</p>
                     </div>
-                    {(isUserOwner || isUserCommentator) ?
+                    {(isUserOwner || isUserCommentator || user.id_role === 2) ?
                         <button className={m.deleteButton} title='Удалить комментарий'
                             onClick={(e) => handleDelete(e, props.id)}></button> :
                         ''}

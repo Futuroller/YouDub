@@ -73,8 +73,6 @@ function PlaylistVideos(props) {
             views={v.views} loadDate={v.load_date} idUserRole={user.id_role} />)
     );
 
-    console.log(playlists)
-
     return (
         <div className={m.container}>
             <div className={m.topContainer}>

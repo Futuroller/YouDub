@@ -70,7 +70,6 @@ function VideoPage(props) {
             if (response.status === 200) {
                 dispatch(fetchAllPlaylists());
             } else {
-                console.log(response);
             }
         } catch (error) {
             console.error('Ошибка обновления плейлиста: ' + error);
@@ -126,7 +125,7 @@ function VideoPage(props) {
         commentsList = allComments.map(c => (
             <Comment key={c.id} id={c.id} text={c.comment_text} likes={c.likes} dislikes={c.dislikes}
                 commentDate={c.comment_date} ownerName={c.user.username}
-                avatar={c.user.avatar_url} currentReaction={c.currentUserReaction} videoOwnerId={id_owner} commentOwnerId={c.user.id} />
+                avatar={c.user.avatar_url} currentReaction={c.currentUserReaction} videoOwnerId={id_owner} commentOwnerId={c.user.id} tagname={c.user.tagname} />
         ));
     }
 

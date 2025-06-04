@@ -35,30 +35,30 @@ function LoginPage(props) {
             placeholder={a.placeholder} onChange={(value) => textChange(a.id, value)} required />
     ));
 
-    const logIn = async (event) => {
-        event.preventDefault();
+    const logIn = async (event) => {//Функция авторизации
+        event.preventDefault();//Отмена стандартного поведения при отправке формы
 
-        const data = {
+        const data = {//объект с данными из текстовых полей
             email: authFieldsData[0].value,
             password: authFieldsData[1].value,
         };
-        dispatch(setUser(null));
+        dispatch(setUser(null));//очистка данных о пользователе из состояния
 
         try {
-            const response = await apiRequest('/auth/login', 'POST', data);
+            const response = await apiRequest('/auth/login', 'POST', data);//запрос на сервер
 
-            if (response.status === 200) {
-                const { token, user } = response;
+            if (response.status === 200) {//успешный ответ с сервера
+                const { token, user } = response;//достаём токен активации и данные пользователя из ответа
 
                 if (user.is__activated) {
                     if (!user.is_banned) {
                         localStorage.setItem('token', token);
                         navigate('/main/mainpage');
-                    } else {
+                    } else {//если пользователь заблокирован, то его не впускает в систему
                         alert(`Ваш аккаунт заблокирован по причине: ${user.ban_reason}`);
                         return;
                     }
-                } else {
+                } else {//если пользователь не активировал аккаунт через email, то его не впускает в систему
                     alert('Автивируйте аккаунт через ваш email');
                     return;
                 }
